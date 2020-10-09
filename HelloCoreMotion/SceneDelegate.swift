@@ -21,14 +21,72 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        
     }
+    
+    // docs show how to handle a URL:
+    // https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let _ = (scene as? UIWindowScene) else {
+            return
+        }
+        
+        if let s = connectionOptions.urlContexts.first {
+            processURL(s)
+        }
+    }
+    
+    func scene(_ scene: UIScene,
+               openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let s = URLContexts.first {
+            processURL(s)
+        }
+    }
+    
+    func processURL(_ s:UIOpenURLContext) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("ERROR no appDelegate in openURLContexts")
+            return
+        }
+        // it is not an error to omit target, survey or fov
+        // host = Optional("target=m98")
+        // host = Optional("target=13 42 11.62 +28 22 38.2")
+        if let host = s.url.host {
+            let fields = host.components(separatedBy: "=")
+            if fields.count > 1 {
+                appDelegate.initialTarget = fields[1]
+            }
+        }
 
+        // query = Optional("survey=P/DSS2/color?fov=5.0")
+      //  print("query = \(s.url.query)")
+        if let query = s.url.query {
+            let components = query.components(separatedBy: "?")
+            if components.count > 0 {
+                let fields = components[0].components(separatedBy: "=")
+                if fields.count > 1 {
+                    appDelegate.initialSurvey = fields[1]
+                }
+            }
+            if components.count > 1 {
+                let fields = components[1].components(separatedBy: "=")
+                if fields.count > 1 {
+                    if let d = Double(fields[1]) {
+                        appDelegate.initialFOV = d
+                    }
+                }
+            }
+        }
+        if let aladin = appDelegate.aladinVC?.aladin {
+            aladin.setImageSurvey(survey: appDelegate.initialSurvey)
+            aladin.setFov(appDelegate.initialFOV)
+            aladin.gotoObject(name: appDelegate.initialTarget, completionHandler: {
+                (d1,d2,error) in
+            })
+        }
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

@@ -363,7 +363,7 @@
                                             <action selector="clickPlusSign:" destination="fJh-XF-Bid" eventType="primaryActionTriggered" id="g86-qc-D9t"/>
                                         </connections>
                                     </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SKY MAP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oT-2g-hFt">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="SKY MAP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oT-2g-hFt">
                                         <rect key="frame" x="20" y="8" width="290" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="290" id="D8V-hF-YnU"/>
@@ -376,10 +376,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="3oT-2g-hFt" firstAttribute="centerX" secondItem="Bg2-t0-BQ4" secondAttribute="centerX" id="e0P-PG-Hhy"/>
-                                    <constraint firstAttribute="height" constant="499" id="qxh-8B-ij1"/>
-                                    <constraint firstItem="3oT-2g-hFt" firstAttribute="top" secondItem="Bg2-t0-BQ4" secondAttribute="top" constant="8" id="w7f-hL-TEL"/>
-                                    <constraint firstAttribute="width" constant="330" id="z8z-Yu-YuY"/>
+                                    <constraint firstAttribute="width" constant="330" id="Bzi-h7-PIe"/>
+                                    <constraint firstAttribute="height" constant="499" id="IUh-LO-7XC"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ALADIN LITE  SURVEY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLn-Pp-btg">
@@ -393,12 +391,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TUG-vF-Wxe">
-                                <rect key="frame" x="31" y="78" width="352" height="90"/>
+                                <rect key="frame" x="0.0" y="78" width="414" height="90"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="352" id="RMR-S9-ERr"/>
-                                    <constraint firstAttribute="height" constant="90" id="s2O-7B-4qX"/>
+                                    <constraint firstAttribute="height" constant="90" id="VKC-tP-avr"/>
                                 </constraints>
                             </pickerView>
                         </subviews>
@@ -406,11 +403,12 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="vLn-Pp-btg" firstAttribute="top" secondItem="JRB-W0-O3q" secondAttribute="top" constant="31" id="7Sb-xb-Wkq"/>
+                            <constraint firstItem="TUG-vF-Wxe" firstAttribute="trailing" secondItem="3UB-7T-2Oo" secondAttribute="trailing" id="Cd4-ul-ftf"/>
                             <constraint firstItem="vLn-Pp-btg" firstAttribute="centerX" secondItem="JRB-W0-O3q" secondAttribute="centerX" id="ER0-32-gj8"/>
-                            <constraint firstItem="Bg2-t0-BQ4" firstAttribute="top" secondItem="TUG-vF-Wxe" secondAttribute="bottom" constant="20" id="GEb-5l-Hdk"/>
-                            <constraint firstItem="Bg2-t0-BQ4" firstAttribute="centerX" secondItem="JRB-W0-O3q" secondAttribute="centerX" id="U2L-AB-Ky5"/>
-                            <constraint firstItem="TUG-vF-Wxe" firstAttribute="centerX" secondItem="JRB-W0-O3q" secondAttribute="centerX" id="YWF-vT-YFf"/>
-                            <constraint firstItem="TUG-vF-Wxe" firstAttribute="top" secondItem="vLn-Pp-btg" secondAttribute="bottom" constant="26" id="ZG7-d4-21t"/>
+                            <constraint firstItem="TUG-vF-Wxe" firstAttribute="leading" secondItem="3UB-7T-2Oo" secondAttribute="leading" id="hPO-L1-a3h"/>
+                            <constraint firstItem="Bg2-t0-BQ4" firstAttribute="top" secondItem="TUG-vF-Wxe" secondAttribute="bottom" constant="20" id="lnt-vv-sfc"/>
+                            <constraint firstItem="Bg2-t0-BQ4" firstAttribute="centerX" secondItem="JRB-W0-O3q" secondAttribute="centerX" id="rdx-b5-1ud"/>
+                            <constraint firstItem="TUG-vF-Wxe" firstAttribute="top" secondItem="vLn-Pp-btg" secondAttribute="bottom" constant="26" id="vh6-XC-tXN"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="4ar-O6-tpt"/>
@@ -439,7 +437,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello Universe 1.0 - 9/27/2020 " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyH-jb-1Lh">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello Universe 1.0 - 10/8/2020" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyH-jb-1Lh">
                                 <rect key="frame" x="0.0" y="44" width="414" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ysG-th-0OL"/>
@@ -482,13 +480,13 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="363" id="X4J-HJ-zua"/>
                                 </constraints>
-                                <mutableString key="text">Hello Universe,  An IOS App
+                                <string key="text">Hello Universe,  An IOS App
 Copyright (C) 2020  Tod Landis
 
  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details:  https:/gnu.org/licenses/  Hello Universe sources will be available on github.    Parts of the app use Aladin Lite,  https://aladin.u-strasbg.fr  Thanks to the Yale Bright Star Catalog for the star data:   http://tdc-www.harvard.edu/catalogs/bsc5.html
-</mutableString>
+</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

@@ -51,8 +51,8 @@ class Aladin {
                 console.log('loading aladin');
         
                 var aladin = A.aladin('#aladin-lite-div', {
-                                      survey: 'P/DSS2/color',
-                                      fov:5,
+                                      survey: 'SURVEY$$$',
+                                      fov:FOV$$$,
                                       fullScreen:true,
                                       showZoomControl:false,
                                       showFullscreenControl:false,
@@ -61,7 +61,7 @@ class Aladin {
                                       showFrame:false,
                                       showGotoControl:false,
                                       showShareControl:false,
-                                    target: 'REPLACE_ME', // initial target
+                                    target: 'TARGET$$$', // initial target
                                                                             });
             document.documentElement.style.webkitUserSelect='none';
 
@@ -73,19 +73,61 @@ class Aladin {
     </html>
     """
 
-    init(_ webView:  WKWebView) {
+    init(_ webView:  WKWebView, target:String = "M31", survey:String = "P/DSS2/color", fov:Double = 5.0) {
         self.webView = webView
-        loadDefaultPage(target: "m31")
-    }
-    
-    func loadDefaultPage(target:String) {
+
         // not supported by this version
         //   let url = NSURL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html")!)
         //       let req = NSURLRequest(url: url as URL)
         // webView.load(req as URLRequest)
         
-        let newHTML = defaultPage.replacingOccurrences(of: "REPLACE_ME", with: target)
+        let newHTML = defaultPage.replacingOccurrences(of: "TARGET$$$", with: target).replacingOccurrences(of: "SURVEY$$$", with: survey).replacingOccurrences(of: "FOV$$$", with: String(fov))
         webView.loadHTMLString(newHTML, baseURL: nil)
+    }
+
+    //HACK
+    func testErrorReturn() {
+//        webView.evaluateJavaScript(
+//            """
+//            aladin.gotoObject('verybad 1', {success: function(raDec) { alert("it worked, position is: " + raDec);}, error: function() {alert('object not found');}});
+//            """,
+//            completionHandler: {
+//                (result,err) in
+//                if err == nil {
+//                    print("NO ERROR???")
+//                }
+//                else {
+//                    print("ERROR received:  \(String(describing: err))")
+//                }
+//
+//        })
+
+        // this prints error received
+        webView.evaluateJavaScript(
+            """
+            aladin.gotoObject('verybad 1');
+            """,
+            completionHandler: {
+                (result,err) in
+                if err == nil {
+                    print("NO ERROR???")
+                }
+                else {
+                    print("ERROR received")
+                }
+
+        })
+        
+        // and so does this
+        gotoObject(name:"verybad 1", completionHandler:{  (ra,dec, err) in
+            if err == nil {
+                print("NO ERROR???")
+            }
+            else {
+                print("ERROR received")
+            }
+        })
+
     }
     
     func getFovCorners(completionHandler: @escaping (Any?, Error?) -> Void) {

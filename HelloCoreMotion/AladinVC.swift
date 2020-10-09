@@ -43,7 +43,7 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
 //            webView.transform = CGAffineTransform(rotationAngle: CGFloat(Float(latitude) * Float.pi/180.0));
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,21 +52,21 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
 //        catalog.updateMessierRaDec()
 //        print("done")
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            self.appDelegate = appDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("ERROR no appDelegate in AladinVC")
+            return
         }
+        
+        self.appDelegate = appDelegate
+        aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
 
         // this is where we would set the FOV
         whoIsThatBehindTheScreen.alpha = 1.0
-        aladin = Aladin(webView)
         
         searchBar.delegate = self
         searchCompleteLabel.alpha = 0.0
 
-        appDelegate = UIApplication.shared.delegate as? AppDelegate
-        if let appDelegate = appDelegate {
-            appDelegate.aladinVC = self
-        }
+        appDelegate.aladinVC = self
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
         tap.delegate = self
@@ -76,7 +76,9 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         pan.delegate = self
         view.addGestureRecognizer(pan)
 
-
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinch(_:)))
+        pinch.delegate = self
+        view.addGestureRecognizer(pinch)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -102,7 +104,12 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         })
     }
     
-    
+    //HACK
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        //        aladin?.testErrorReturn()
+    }
+
     @objc
     func tapped(_ recognizer: UIGestureRecognizer) {
      //   print("TAP")
@@ -112,7 +119,14 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
     var lastTranslation = CGPoint(x: 0,y: 0)
     @objc
     func pan(_ recognizer: UIPanGestureRecognizer) {
-//        print("PAN!")
+   //     print("PAN!")
+        searchCompleteLabel.alpha = 0.0
+        updateLabels()
+    }
+
+    @objc
+    func pinch(_ recognizer: UIPinchGestureRecognizer) {
+   //     print("PINCH!")
         searchCompleteLabel.alpha = 0.0
         updateLabels()
     }
