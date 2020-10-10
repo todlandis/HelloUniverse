@@ -59,11 +59,16 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         
         self.appDelegate = appDelegate
         aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
-
+        
         // this is where we would set the FOV
         whoIsThatBehindTheScreen.alpha = 1.0
         
         searchBar.delegate = self
+        if appDelegate.targetIsFromUrl {
+            // when loading from a URL show the target in the
+            //    seasrch bar
+            searchBar.text = appDelegate.initialTarget
+        }
         searchCompleteLabel.alpha = 0.0
 
         appDelegate.aladinVC = self

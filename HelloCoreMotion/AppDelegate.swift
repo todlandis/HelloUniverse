@@ -23,6 +23,7 @@ import CoreLocation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // see AladinVC
+    var targetIsFromUrl = false        // see processUrl() & AladinVC
     var initialTarget:String = "M31"
     var initialFOV =           5.0
     var initialSurvey =        "P/DSS2/color"

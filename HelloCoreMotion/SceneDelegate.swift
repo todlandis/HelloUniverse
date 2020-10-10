@@ -27,6 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // docs show how to handle a URL:
     // https://developer.apple.com/documentation/xcode/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app
+    // loading a url with the app not running comes here
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else {
             return
@@ -37,6 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
+    // loading a url with the app running comes here
     func scene(_ scene: UIScene,
                openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let s = URLContexts.first {
@@ -49,35 +51,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             print("ERROR no appDelegate in openURLContexts")
             return
         }
-        // it is not an error to omit target, survey or fov
+
+        // hellouniverse://target?survey?fov
         // host = Optional("target=m98")
         // host = Optional("target=13 42 11.62 +28 22 38.2")
         if let host = s.url.host {
-            let fields = host.components(separatedBy: "=")
-            if fields.count > 1 {
-                appDelegate.initialTarget = fields[1]
+            appDelegate.targetIsFromUrl = true
+            if let aladinVC = appDelegate.aladinVC  {
+                aladinVC.searchBar.text = host
             }
+            appDelegate.initialTarget = host
         }
+        
 
-        // query = Optional("survey=P/DSS2/color?fov=5.0")
+        // query = Optional("fov=5.0?survey=P/DSS2/color")
       //  print("query = \(s.url.query)")
         if let query = s.url.query {
             let components = query.components(separatedBy: "?")
             if components.count > 0 {
-                let fields = components[0].components(separatedBy: "=")
-                if fields.count > 1 {
-                    appDelegate.initialSurvey = fields[1]
-                }
+                appDelegate.initialSurvey = components[0]
             }
             if components.count > 1 {
-                let fields = components[1].components(separatedBy: "=")
-                if fields.count > 1 {
-                    if let d = Double(fields[1]) {
-                        appDelegate.initialFOV = d
-                    }
+                if let d = Double(components[1]) {
+                    appDelegate.initialFOV = d
                 }
             }
         }
+        
         if let aladin = appDelegate.aladinVC?.aladin {
             aladin.setImageSurvey(survey: appDelegate.initialSurvey)
             aladin.setFov(appDelegate.initialFOV)

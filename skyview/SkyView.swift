@@ -899,6 +899,7 @@ class SkyView: UIView {
             plotLabel(X,Y,Z, g, settings.constellationLabelSize)
         }
         
+        //
         if(settings.drawCommonNames && (g == "α" || scale > 1000.0)) {
             plotLabel(X,Y,Z,star.commonName,settings.starNameLabelSize)
         }
