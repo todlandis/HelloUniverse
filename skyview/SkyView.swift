@@ -895,22 +895,62 @@ class SkyView: UIView {
         plotXYZ(X,Y,Z,size)
 
         let g = greekToString(star.greek)
-        if(settings.drawBayer) {
-            plotLabel(X,Y,Z, g, settings.constellationLabelSize)
+        
+        // scale determines what is drawn for a star label
+//        print(scale)
+        var label:String = ""
+        let ZOOMED_ENOUGH = 5000.0
+        if(settings.drawCommonNames) {
+            if scale > ZOOMED_ENOUGH {
+                // every bright star gets at least HR
+                if star.commonName.count > 0 {
+                    label = star.commonName
+                }
+                else {
+                    label = String(format:"HR %d",star.hr)
+                }
+            }
+            else if (g == "α" || scale > 1000.0) {
+                label = star.commonName
+            }
         }
         
-        //
-        if(settings.drawCommonNames && (g == "α" || scale > 1000.0)) {
-            plotLabel(X,Y,Z,star.commonName,settings.starNameLabelSize)
+        if settings.drawBayer {
+            if settings.drawCommonNames {
+                label = g.appending(" ").appending(label)
+            }
+            else {
+                label = g
+            }
         }
         
-        if(settings.drawMagnitude && star.magnitude <= 5.0) {
-            plotLabel(X,Y,Z, String(format:"%.1f",star.magnitude))
+        if settings.drawMagnitude {
+            if scale > ZOOMED_ENOUGH {
+                label = label.appending(" ").appending(String(format:"%.1f",star.magnitude))
+            }
         }
+        
+        if settings.drawSpectralType {
+            if scale > ZOOMED_ENOUGH {
+                label = label.appending(" ").appending(star.spectralType)
+            }
+        }
+        
+        if settings.drawParsecs {
+            if scale > ZOOMED_ENOUGH {
+                label = label.appending(" ").appending(String(format:"%.1f pc",star.parsecs))
+            }
+        }
+
+        if label.count > 0 {
+            plotLabel(X,Y,Z,label,settings.starNameLabelSize)
+        }
+
     }
 
     // this is going away
     func plotLabel(_ X:Double,_ Y:Double,_ Z:Double,_ label:String, _ size:CGFloat = 24.0, color:UIColor = TangoColors.LIGHT_CHARCOAL) {
+
         guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }

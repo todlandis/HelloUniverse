@@ -20,15 +20,20 @@ import UIKit
 class Settings {
     var drawConstellationLines = true
     var drawConstellationNames = true
+    
     var drawGrid =     false
     var drawFOV =      false         
     var drawBayer =    false
     var drawCommonNames =  false
+    
     var drawMagnitude =    false       // ui does not surface this yet
+    var drawSpectralType =    false    // ui does not surface this yet
+    var drawParsecs =    false         // ui does not surface this yet
+
     var drawMessier =      true
 
     var drawBullsEye =     false       // ui does not surface this yet
-    var drawAladin =       false
+    var drawAladin =       true        // true in the 2nd release
     var drawPlusSigns =    true
     
     var messierLabelSize =       CGFloat(14.0)
