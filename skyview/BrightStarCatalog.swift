@@ -187,7 +187,6 @@ class BrightStarCatalog : SqliteDatabase {
     
     // read names and 6-tuples from table EndPoints
     func getConstellationLines() -> [(name:String, first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]? {
-        
         var points = [(name:String,first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]()
         
         var statement: OpaquePointer? = nil
@@ -207,6 +206,12 @@ class BrightStarCatalog : SqliteDatabase {
                         print("ERROR a constellation name was missing")
                     }
                     
+//                    //HACK
+//                    if name == "Cas" {
+//                        print("Cas")
+//                        continue
+//                    }
+
                     let x1 = sqlite3_column_double(statement, 1)
                     let y1 = sqlite3_column_double(statement, 2)
                     let z1 = sqlite3_column_double(statement, 3)

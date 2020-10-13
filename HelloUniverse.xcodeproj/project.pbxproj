@@ -12,6 +12,7 @@
 		D31E5D1924D3B87C0013B254 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D31E5D1724D3B87C0013B254 /* Main.storyboard */; };
 		D31E5D1B24D3B87D0013B254 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31E5D1A24D3B87D0013B254 /* Assets.xcassets */; };
 		D31E5D1E24D3B87D0013B254 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D31E5D1C24D3B87D0013B254 /* LaunchScreen.storyboard */; };
+		D3207C8325350B6D007396DB /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3207C8225350B6D007396DB /* Macro.swift */; };
 		D3246534251E773700C4D227 /* Telescope.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3246533251E773700C4D227 /* Telescope.swift */; };
 		D3431EFD25269AAF00E11DDF /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = D3431EFC25269AAF00E11DDF /* COPYING */; };
 		D349222624E12401007560B5 /* LatLonFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D349222524E12401007560B5 /* LatLonFinder.swift */; };
@@ -27,11 +28,13 @@
 		D35D7A5C24E3B852001F5E66 /* TangoColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D7A5B24E3B852001F5E66 /* TangoColors.swift */; };
 		D35D7A5E24E3B932001F5E66 /* Greek.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D7A5D24E3B932001F5E66 /* Greek.swift */; };
 		D35D7A6024E3BCD5001F5E66 /* SkyViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D7A5F24E3BCD5001F5E66 /* SkyViewVC.swift */; };
+		D363158F253FB05D000E9FBC /* HelpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D363158E253FB05D000E9FBC /* HelpVC.swift */; };
 		D38EB2CB24D8DFF100CB55C3 /* Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EB2CA24D8DFF100CB55C3 /* Convert.swift */; };
 		D38EB2CD24DA328400CB55C3 /* Astro.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EB2CC24DA328400CB55C3 /* Astro.swift */; };
 		D3940EEE24E925C600A69907 /* Constellations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EED24E925C600A69907 /* Constellations.swift */; };
 		D3940EF124EA41FC00A69907 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EF024EA41FC00A69907 /* SettingsVC.swift */; };
 		D3940EF324EB29BC00A69907 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EF224EB29BC00A69907 /* Settings.swift */; };
+		D3A45479253B88BD00DA4904 /* DeviceAttitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A45478253B88BD00DA4904 /* DeviceAttitude.swift */; };
 		D3E88E8A250080E9009D0EBF /* InfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E88E89250080E9009D0EBF /* InfoVC.swift */; };
 		D3E88E8C2500ABD6009D0EBF /* m54.png in Resources */ = {isa = PBXBuildFile; fileRef = D3E88E8B2500ABD6009D0EBF /* m54.png */; };
 		D3ECC8D3251FDCB6006A80FE /* PlusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ECC8D2251FDCB6006A80FE /* PlusView.swift */; };
@@ -45,6 +48,7 @@
 		D31E5D1A24D3B87D0013B254 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D31E5D1D24D3B87D0013B254 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D31E5D1F24D3B87D0013B254 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3207C8225350B6D007396DB /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
 		D3246533251E773700C4D227 /* Telescope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Telescope.swift; sourceTree = "<group>"; };
 		D3431EFC25269AAF00E11DDF /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		D3431EFE25269B2800E11DDF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -61,12 +65,14 @@
 		D35D7A5B24E3B852001F5E66 /* TangoColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TangoColors.swift; sourceTree = "<group>"; };
 		D35D7A5D24E3B932001F5E66 /* Greek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Greek.swift; sourceTree = "<group>"; };
 		D35D7A5F24E3BCD5001F5E66 /* SkyViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyViewVC.swift; sourceTree = "<group>"; };
+		D363158E253FB05D000E9FBC /* HelpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpVC.swift; sourceTree = "<group>"; };
 		D38EB2CA24D8DFF100CB55C3 /* Convert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convert.swift; sourceTree = "<group>"; };
 		D38EB2CC24DA328400CB55C3 /* Astro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Astro.swift; sourceTree = "<group>"; };
 		D3940EED24E925C600A69907 /* Constellations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constellations.swift; sourceTree = "<group>"; };
 		D3940EEF24E9C0F200A69907 /* HelloCoreMotion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HelloCoreMotion.entitlements; sourceTree = "<group>"; };
 		D3940EF024EA41FC00A69907 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		D3940EF224EB29BC00A69907 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D3A45478253B88BD00DA4904 /* DeviceAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAttitude.swift; sourceTree = "<group>"; };
 		D3E88E89250080E9009D0EBF /* InfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVC.swift; sourceTree = "<group>"; };
 		D3E88E8B2500ABD6009D0EBF /* m54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = m54.png; sourceTree = "<group>"; };
 		D3ECC8D2251FDCB6006A80FE /* PlusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusView.swift; sourceTree = "<group>"; };
@@ -96,7 +102,9 @@
 				D31E5D1724D3B87C0013B254 /* Main.storyboard */,
 				D3ECC8D2251FDCB6006A80FE /* PlusView.swift */,
 				D38EB2CC24DA328400CB55C3 /* Astro.swift */,
+				D3A45478253B88BD00DA4904 /* DeviceAttitude.swift */,
 				D38EB2CA24D8DFF100CB55C3 /* Convert.swift */,
+				D3207C8225350B6D007396DB /* Macro.swift */,
 				D31E5D1024D3B87C0013B254 /* HelloCoreMotion */,
 				D349222D24E378CC007560B5 /* Frameworks */,
 			);
@@ -119,6 +127,7 @@
 				D349222B24E3758F007560B5 /* AladinVC.swift */,
 				D35D7A5F24E3BCD5001F5E66 /* SkyViewVC.swift */,
 				D3940EF024EA41FC00A69907 /* SettingsVC.swift */,
+				D363158E253FB05D000E9FBC /* HelpVC.swift */,
 				D3E88E89250080E9009D0EBF /* InfoVC.swift */,
 				D31E5D1A24D3B87D0013B254 /* Assets.xcassets */,
 				D31E5D1C24D3B87D0013B254 /* LaunchScreen.storyboard */,
@@ -236,17 +245,20 @@
 				D349222C24E3758F007560B5 /* AladinVC.swift in Sources */,
 				D31E5D1224D3B87C0013B254 /* AppDelegate.swift in Sources */,
 				D35D7A5824E3B399001F5E66 /* Star.swift in Sources */,
+				D363158F253FB05D000E9FBC /* HelpVC.swift in Sources */,
 				D35D7A6024E3BCD5001F5E66 /* SkyViewVC.swift in Sources */,
 				D38EB2CD24DA328400CB55C3 /* Astro.swift in Sources */,
 				D35D7A5C24E3B852001F5E66 /* TangoColors.swift in Sources */,
 				D35D7A5624E3B2E4001F5E66 /* SqliteDatabase.swift in Sources */,
 				D35D7A5224E3A6CF001F5E66 /* Matrix.swift in Sources */,
+				D3207C8325350B6D007396DB /* Macro.swift in Sources */,
 				D3ECC8D3251FDCB6006A80FE /* PlusView.swift in Sources */,
 				D3940EF324EB29BC00A69907 /* Settings.swift in Sources */,
 				D35D7A4F24E3A220001F5E66 /* SkyView.swift in Sources */,
 				D3246534251E773700C4D227 /* Telescope.swift in Sources */,
 				D35D7A5424E3AD5D001F5E66 /* BrightStarCatalog.swift in Sources */,
 				D349222624E12401007560B5 /* LatLonFinder.swift in Sources */,
+				D3A45479253B88BD00DA4904 /* DeviceAttitude.swift in Sources */,
 				D31E5D1424D3B87C0013B254 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,15 +408,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HelloCoreMotion/HelloCoreMotion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 9H3CEX326G;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				INFOPLIST_FILE = HelloCoreMotion/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.todlandis.HelloUniverse;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -421,15 +434,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HelloCoreMotion/HelloCoreMotion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 9H3CEX326G;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				INFOPLIST_FILE = HelloCoreMotion/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.todlandis.HelloUniverse;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -17,7 +17,6 @@
 import Foundation
 import CoreLocation
 
-// never used ... keep for later
 public protocol LatLonFinderDelegate : NSObjectProtocol {
     func updateLocation(location:CLLocation)
     func locationIsNotAvailable()
@@ -30,8 +29,20 @@ class LatLonFinder : NSObject, CLLocationManagerDelegate {
     
     func getLocationOnce() {
         locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        
+        switch(CLLocationManager.authorizationStatus()) {
+        case .restricted,.denied:
+            delegate?.locationIsNotAvailable()
+            break
+        case .authorizedAlways,.authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
+            break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            break
+        @unknown default:
+            locationManager.requestWhenInUseAuthorization()
+        }
         once = true
     }
 
@@ -40,37 +51,12 @@ class LatLonFinder : NSObject, CLLocationManagerDelegate {
         case .notDetermined:
             break
         
-        // This application is not authorized to use location services.  Due
-        // to active restrictions on location services, the user cannot change
-        // this status, and may not have personally denied authorization
-        case .restricted:
+        case .restricted,.denied:
             delegate?.locationIsNotAvailable()
             break
         
-        // User has explicitly denied authorization for this application, or
-        // location services are disabled in Settings.
-        case .denied:
-            delegate?.locationIsNotAvailable()
-            break
-        
-        // User has granted authorization to use their location at any
-        // time.  Your app may be launched into the background by
-        // monitoring APIs such as visit monitoring, region monitoring,
-        // and significant location change monitoring.
-        //
-        // This value should be used on iOS, tvOS and watchOS.  It is available on
-        // MacOS, but kCLAuthorizationStatusAuthorized is synonymous and preferred.
-        case .authorizedAlways:
-            break
-        
-        // User has granted authorization to use their location only while
-        // they are using your app.  Note: You can reflect the user's
-        // continued engagement with your app using
-        // -allowsBackgroundLocationUpdates.
-        //
-        // This value is not available on MacOS.  It should be used on iOS, tvOS and
-        // watchOS.
-        case .authorizedWhenInUse:
+        case .authorizedAlways,.authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
             break
         default:
             break

@@ -29,6 +29,31 @@ class Convert {
         return icrsToRADec(string.components(separatedBy: .whitespaces))
     }
     
+    class func raDecToIcrs(ra:Double, dec:Double, underscored:Bool = true) -> String {
+        let (h,m,s) = Convert.decimalDegreesToHMS(ra)
+      //  print("\(ra) -> \(h) \(m) \(s)")
+        let (dd,mm,ss) = Convert.decimalDegreesToDMS(dec)
+      //  print("\(dec) -> \(dd) \(mm) \(ss)")
+        var sign = ""
+        var id = 0
+        if(dd > 0) {
+            sign = "+"
+            id = Int(dd)
+        }
+        else {
+            sign = "-"
+            id = Int(-dd)
+        }
+        
+        if underscored {
+            // blanks are replaced with underscores
+            return String(format:"%02d_%02d_%.3f_\(sign)%02d_%02d_%.3f",Int(h),Int(m),s,id,Int(mm),ss)
+        }
+        else {
+            return String(format:"%02d %02d %.3f \(sign)%02d %02d %.3f",Int(h),Int(m),s,id,Int(mm),ss)
+        }
+    }
+    
     class func icrsToRADec(_ components:[String]) -> (ra:Double, dec:Double)? {
         if(components[0] != "icrs") {
             print("ERROR in icrsToRADec() - first component must be \"icrs\"")

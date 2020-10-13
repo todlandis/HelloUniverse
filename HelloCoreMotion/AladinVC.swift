@@ -14,12 +14,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-// 2.0
 
 import UIKit
 import WebKit
+import MapKit
 
-class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
+class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate {
+    
     
     @IBOutlet weak var plusView: PlusView!
     @IBOutlet weak var whoIsThatBehindTheScreen: UIView!
@@ -33,8 +34,13 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
     @IBOutlet weak var raDecLabel: UILabel!
     
     @IBOutlet weak var fovLabel: UILabel!
+    
+    @IBOutlet weak var howToGetHelpLabel: UILabel!
+    
     var aladin:Aladin? = nil
     var appDelegate:AppDelegate? = nil
+
+    let latLonFinder = LatLonFinder()
     var latitude:Double = 0.0 {
         didSet {
             // LATER
@@ -43,14 +49,14 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
 //            webView.transform = CGAffineTransform(rotationAngle: CGFloat(Float(latitude) * Float.pi/180.0));
         }
     }
+    var longitude:Double = 0.0
+    
+    var showStarted:Bool = false   // has startTheShow() been called?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-// hack
-//        let catalog = BrightStarCatalog()
-//        catalog.updateMessierRaDec()
-//        print("done")
+//        Astro.test()
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("ERROR no appDelegate in AladinVC")
@@ -58,19 +64,21 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         }
         
         self.appDelegate = appDelegate
-        aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
-        
-        // this is where we would set the FOV
-        whoIsThatBehindTheScreen.alpha = 1.0
-        
-        searchBar.delegate = self
-        if appDelegate.targetIsFromUrl {
-            // when loading from a URL show the target in the
-            //    seasrch bar
-            searchBar.text = appDelegate.initialTarget
-        }
-        searchCompleteLabel.alpha = 0.0
 
+        whoIsThatBehindTheScreen.alpha = 1.0
+        searchBar.delegate = self
+
+        if appDelegate.targetIsFromUrl {
+            searchBar.text = appDelegate.initialTarget
+            aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
+        }
+        else {
+            latLonFinder.delegate = self
+            // see locationChanged()
+            latLonFinder.getLocationOnce()
+        }
+            
+        searchCompleteLabel.alpha = 0.0
         appDelegate.aladinVC = self
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
@@ -84,57 +92,77 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinch(_:)))
         pinch.delegate = self
         view.addGestureRecognizer(pinch)
+        
+//        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swipe(_:)))
+//        swipe.delegate = self
+//        view.addGestureRecognizer(swipe)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        UIView.animate(withDuration: 1, delay: 3, options: [], animations: {self.whoIsThatBehindTheScreen.alpha = 0.0}, completion: {_ in
-            self.updateLabels()
-            
-            if let skyViewVC = self.appDelegate?.skyViewVC {
-                let (ra,dec) = skyViewVC.skyView.getRaDec()
-                self.aladin?.gotoRaDec(ra: ra, dec: dec)
-            }
-            
-            if let settings =  self.appDelegate?.settings {
-                self.plusView.alpha = settings.drawPlusSigns ? 1.0 : 0.0
-                if let previousSurvey = self.previousSurvey {
-                    if previousSurvey != settings.survey {
-                        self.aladin?.setImageSurvey(survey: settings.survey)
-                    }
-                }
-                self.previousSurvey = settings.survey
-            }
 
+        if let settings =  self.appDelegate?.settings {
+            self.plusView.alpha = settings.drawPlusSigns ? 1.0 : 0.0
+            if !(self.aladin?.getImageSurvey() == settings.survey) {
+                self.aladin?.setImageSurvey(survey: settings.survey)
+            }
+        }
+
+        if let skyViewVC = self.appDelegate?.skyViewVC {
+            // when SkyView sets the target, Aladin must have
+            //   been initialized, because ALadinVC is the startup VC
+            let (raMap,decMap) = skyViewVC.skyView.getRaDec()
+            aladin?.getRaDec(completionHandler: {
+                                ra,dec,err in
+                // don't set the position unless needed, it triggers redraw
+                if abs(ra - raMap) > 0.0001 || abs(dec - decMap) > 0.0001 {
+                    self.aladin?.gotoRaDec(ra: raMap, dec: decMap)
+                }
+            })
+            updateLabels()
+        }
+    }
+    
+    // the startup sequence:  hide whoIsThatBehindTheScreen,
+    //   show the how to get help message
+    func startTheShow() {
+        if showStarted {
+            return
+        }
+        showStarted = true
+        
+        UIView.animate(withDuration: 2, delay: 2, options: [], animations: {self.whoIsThatBehindTheScreen.alpha = 0.0}, completion: {_ in
+            self.updateLabels()
+
+            UIView.animate(withDuration: 4, delay: 0, options: [], animations: {self.howToGetHelpLabel.alpha = 0.0}, completion: {_ in
+            })
         })
     }
     
-    //HACK
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //        aladin?.testErrorReturn()
-    }
-
     @objc
     func tapped(_ recognizer: UIGestureRecognizer) {
-     //   print("TAP")
         searchCompleteLabel.alpha = 0.0
     }
 
     var lastTranslation = CGPoint(x: 0,y: 0)
     @objc
     func pan(_ recognizer: UIPanGestureRecognizer) {
-   //     print("PAN!")
         searchCompleteLabel.alpha = 0.0
         updateLabels()
     }
 
     @objc
     func pinch(_ recognizer: UIPinchGestureRecognizer) {
-   //     print("PINCH!")
         searchCompleteLabel.alpha = 0.0
         updateLabels()
     }
+
+//    @objc
+//    func swipe(_ recognizer: UISwipeGestureRecognizer) {
+//        print("SWIPE!")
+//        searchCompleteLabel.alpha = 0.0
+//        updateLabels()
+//    }
 
     func updateLabels() {
         aladin?.getRaDec(completionHandler: {
@@ -172,12 +200,12 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-      return true
+        return true
     }
-
-    var previousSurvey:String? = nil
+    
+    //    var previousSurvey:String? = nil
     // as we leave set the sky map to match this ra,dec
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -185,15 +213,12 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
             (ra,dec,err) in
             
             if let appDelegate = self.appDelegate {
-                self.previousSurvey = appDelegate.settings!.survey
+                //                self.previousSurvey = appDelegate.settings!.survey
                 if let skyView = appDelegate.skyViewVC?.skyView {
                     skyView.gotoRaDec(ra: ra, dec: dec)
-                    skyView.aladinPlus = (ra:ra,dec:dec)
-                    skyView.latAngle = self.latitude
                     self.aladin?.getFovCorners(completionHandler: {
                         vals,err in
                         if let corners = vals as? [(ra:Double,dec:Double)] {
-//                            print("leaving aladinVC upper left corner \(corners[0])")
                             skyView.setAladinCorners(corners)
                         }
                         skyView.setNeedsDisplay()
@@ -203,30 +228,66 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
             }
         })
     }
-
+    
     // MARK: UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
         searchCompleteLabel.alpha = 0.0
     }
-
+    
     func searchBarTextDidEndEditing(_ sb:UISearchBar) {
         sb.resignFirstResponder()
     }
     
     func searchBarSearchButtonClicked(_ sb:UISearchBar) {
         sb.resignFirstResponder()
+        
+        // extensions to Aladin Lite for first char ?, !, and :
         if let text = sb.text {
-            aladin?.gotoObject(name: text, completionHandler: {
-                (ra,dec,error) in
-                self.searchCompleteLabel.alpha = 1.0
-                if let error = error {
-                    // dialog here
-                    // needs thought
-                    print(error.localizedDescription)
-                }
-            })
+            if text.hasPrefix("?")  {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let helpVC = storyboard.instantiateViewController(identifier: "HelpScreen")
+                present(helpVC,animated: false,completion: nil)
             }
+            else if text.hasPrefix("!") {
+                gotoTheZenith()
+            }
+            else if text.hasPrefix(":") {
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                    return
+                }
+                let macro = appDelegate.macro
+                
+                let start = text.index(text.startIndex, offsetBy: 1)
+    //            let end =   text.index(text.endIndex, offsetBy:0)
+                let range = start..<text.endIndex
+                let s = String(text[range]).trimmingCharacters(in: .whitespaces)
+                switch(s) {
+                case "c", "C":
+                    macro.copyUrlToClipboard()
+                    break
+                default:
+                    break
+                }
+//                print(s)
+                
+            }
+            else {
+                aladin?.gotoObject(name: text, completionHandler: {
+                    (ra,dec,error) in
+                    self.searchCompleteLabel.alpha = 1.0
+                    if let error = error {
+                        // dialog here
+                        // needs thought
+                        print(error.localizedDescription)
+                    }
+                    else {
+                        self.updateLabels()
+                    }
+                })
+                
+            }
+        }
     }
     
     func searchBarCancelButtonClicked(_ sb:UISearchBar) {
@@ -234,7 +295,7 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
         searchCompleteLabel.alpha = 0.0
         sb.resignFirstResponder()
     }
-
+    
     
     @IBAction func clickOverAladinIcon(_ sender: Any) {
         let alert = UIAlertController(title: "", message:"You are about to leave HelloUniverse to view the Aladin Lite web page in Safari.  Continue?", preferredStyle: .alert)
@@ -256,5 +317,45 @@ class AladinVC: UIViewController, UISearchBarDelegate, UIGestureRecognizerDelega
             style: UIAlertAction.Style.destructive) { (action) in
         })
         present(alert, animated: true, completion: nil)
+    }
+    
+    func updateLocation(location: CLLocation) {
+        latitude = location.coordinate.latitude
+        longitude = location.coordinate.longitude
+        locationChanged()
+    }
+    
+    
+    func locationIsNotAvailable() {
+        // Boulder Creek, CA
+        latitude = 37.1261
+        longitude = -122.1222
+        locationChanged()
+    }
+    
+    // the user's observation location changed
+    func locationChanged() {
+        gotoTheZenith()
+        startTheShow()
+    }
+    
+    func gotoTheZenith() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        // getting the zenith for the initial target
+        let z = Astro.zenith(date: Date(), latitude: latitude, longitude: longitude)
+//        print("z = \(z)")
+        let text = Convert.raDecToIcrs(ra: z.ra, dec: z.dec, underscored: false)
+        //       print("icrs = \(text)")
+        if aladin == nil {
+            appDelegate.initialTarget = text
+            appDelegate.initialFOV = 60.0
+            aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
+        }
+        else {
+            aladin?.gotoRaDec(ra: z.ra, dec: z.dec)
+        }
     }
 }

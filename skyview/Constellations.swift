@@ -23,6 +23,7 @@ class Constellations {
     
     // this takes the output of getConstellationPointsXYZ() to pairs of points in XYZ
     // used for making the database table EndPoints  It's used by
+    // makeConstellationLines()
     func getConstellationPointsXYZ0(_ name:String) -> [(name:String, first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]? {
         
         var points = [(name:String,first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]()
@@ -782,7 +783,14 @@ class Constellations {
 //            "pup",
 //            "pyx",
 //            "ret",
-//            "scl",
+        case  "scl":
+            pairs = [
+                ("Alp","Iot"),
+                ("Iot","Del"),
+                ("Del","Gam"),
+                ("Gam","Bet"),
+            ]
+            return  pairsToPoints(pairs:pairs!,name:namel)
         case "sco":
             pairs =  [
                 ("Bet1","Del"),

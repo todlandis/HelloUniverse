@@ -192,6 +192,7 @@ class SettingsVC: UIViewController, UIPickerViewDelegate,UIPickerViewDataSource 
         if let settings = appDelegate?.settings {
             if row < surveys.count {
                 settings.survey = surveys[row].id
+                appDelegate?.initialSurvey = surveys[row].id
             }
         }
     }

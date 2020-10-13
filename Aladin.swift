@@ -27,6 +27,8 @@ class Aladin {
     
     var verbose:Bool = false
     
+    var currentSurvey:String  // this will go away when I can do aladin.getImageSurvey()
+    
     // this is the startup page which can be any HTML with the
     // Aladin snippet in it.  This version adds 'markerlayer' which is
     // a start on annotations, but not surfaced yet.
@@ -82,25 +84,12 @@ class Aladin {
         // webView.load(req as URLRequest)
         
         let newHTML = defaultPage.replacingOccurrences(of: "TARGET$$$", with: target).replacingOccurrences(of: "SURVEY$$$", with: survey).replacingOccurrences(of: "FOV$$$", with: String(fov))
+        currentSurvey = survey
         webView.loadHTMLString(newHTML, baseURL: nil)
     }
 
     //HACK
     func testErrorReturn() {
-//        webView.evaluateJavaScript(
-//            """
-//            aladin.gotoObject('verybad 1', {success: function(raDec) { alert("it worked, position is: " + raDec);}, error: function() {alert('object not found');}});
-//            """,
-//            completionHandler: {
-//                (result,err) in
-//                if err == nil {
-//                    print("NO ERROR???")
-//                }
-//                else {
-//                    print("ERROR received:  \(String(describing: err))")
-//                }
-//
-//        })
 
         // this prints error received
         webView.evaluateJavaScript(
@@ -268,22 +257,13 @@ class Aladin {
         """)
     }
     
-    /*
-     <a href="P/DSS2/color" rel="tooltip" title="Toggle Digitized Sky Survey map">Optical</a>&nbsp;
-     <a href="P/Mellinger/color" rel="tooltip" title="Toggle Mellinger color map">Mellinger</a>&nbsp;
-     <a href="P/GALEXGR6/AIS/color" rel="tooltip" title="Toggle MAST Galex map">GALEX AIS</a>&nbsp;
-     <a href="P/DSS2/red" rel="tooltip" title="Toggle Digitized Sky Survey 2 Red map">DSS2 Red</a>&nbsp;
-     <a href="P/IRIS/color" rel="tooltip" title="Toggle Improved IRIS Infrared map">IRIS</a>&nbsp;
-     <a href="P/2MASS/color" rel="tooltip" title="Toggle 2 Micron All-Sky Survey map">2MASS</a>&nbsp;
-     <a data-step="9" data-intro="Now, how about comparing these heatmap with some actual sky images? Click on these surveys to toggle the last loaded heatmap with a base layer." href="P/Finkbeiner" rel="tooltip" title="Toggle Hydrogen Alpha map">Halpha</a>&nbsp;
-     <a href="P/VTSS/Ha" rel="tooltip" title="Toggle Virginia Tech Spectral-Line Survey map">VTSS</a>&nbsp;
-*/
-     
+    func getImageSurvey() -> String {
+        return currentSurvey  // LATER aladin s/b the source of truth
+    }
+    
     func setImageSurvey(survey:String) {
+        currentSurvey = survey
         execute(cmd:"aladin.setImageSurvey(\'\(survey)\')")
-
-//      execute(cmd:"aladin.setImageSurvey('P/VTSS/Ha');")
-// worked
     }
 
     func gotoRaDec(ra:Double, dec:Double) {

@@ -20,7 +20,7 @@ import UIKit
 class SkyViewVC: UIViewController, SkyViewDelegate {
     @IBOutlet weak var skyView: SkyView!
 
-    @IBOutlet weak var unlockButton: UIButton!
+    @IBOutlet weak var unlockButton: UIButton!  // no longer used
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,26 +31,35 @@ class SkyViewVC: UIViewController, SkyViewDelegate {
             skyView.settings = appDelegate.settings
             skyView.delegate = self
         }
-        
         unlockButton.alpha = 0.0
     }
     
     /*
      Match the center point of the Aladin view
-     The view here "tracks" where the phone is pointed when 'tracking' is true and the bullseye is shown.
+     The view here "tracks" where the phone is pointed when 'tracking' is true
+     and the bullseye is shown.
      */
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        // see AladinVC.viewWillDisappear()
+        // Think about before changing:  user jumps from Aladin to Settings, then to SkyView
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
            let vc = appDelegate.aladinVC {
             vc.aladin?.getRaDec(completionHandler: {
-                (ra,dec,error) in
+                ra,dec,error in
                 if error == nil {
                     self.skyView.aladinPlus = (ra:ra,dec:dec)
                 }
             })
-            
+            vc.aladin?.getFovCorners(completionHandler: {
+                vals,error in
+                if error == nil {
+                    if let corners = vals as? [(ra:Double,dec:Double)] {
+                        self.skyView.setAladinCorners(corners)
+                    }
+                }
+            })
+            self.skyView.setNeedsDisplay()
         }
     }
     
@@ -60,4 +69,16 @@ class SkyViewVC: UIViewController, SkyViewDelegate {
     
     func didPanSkyView() {
     }
+
+    //hack
+//    func makeConstellationLines() {
+//        let constellations = Constellations()
+//        for name in ["scl"] {
+//            if let points = constellations.getConstellationPointsXYZ0(name) {
+//                for point in points {
+//                    print("\(point.first.x)\t\(point.first.y)\t\(point.first.z)\t\(point.second.x)\t\(point.second.y)\t\(point.second.z))")
+//                }
+//            }
+//        }
+//    }
 }

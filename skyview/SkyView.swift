@@ -57,8 +57,10 @@ class SkyView: UIView {
     var plusPoints =    [(ra:Double,dec:Double)]()
     var aladinPlus:(ra:Double,dec:Double)? = nil
     
-    // see AladinVC.viewWillDisappear()...this was the last field in Aladin
-    var aladinCorners = [(ra:Double,dec:Double)]()
+    // see AladinVC.viewWillDisappear()
+    var aladinCorners = [(ra:Double,dec:Double)?](repeating: (ra:0.0,dec:0.0), count: 4)
+    var aladinCornersAreSet = false       // does aladinCornersPix have valid values?
+    var aladinCornersPix = [CGPoint?](repeating: CGPoint(x:0,y:0), count: 4)
     
     // see drawCrossHairs() below
     var crossHairs:(ra:Double,dec:Double)? = nil
@@ -128,23 +130,37 @@ class SkyView: UIView {
     }
 
     @objc
-    func tapped(_ recognizer: UIPinchGestureRecognizer) {
+    func tapped(_ recognizer: UITapGestureRecognizer) {
         if let delegate = delegate {
             delegate.didTapSkyView()
         }
 
     }
     
+    var originalCornersPix = [CGPoint?](repeating: CGPoint(x:0,y:0), count: 4)
+
     @objc
     func pinch(_ recognizer: UIPinchGestureRecognizer) {
         let scale = Double(recognizer.scale)
         switch recognizer.state {
         case .began:
-            //          print("began")
+            //          print("began")(
             originalScale = scaleForStarView
+            originalCornersPix = aladinCornersPix
             break
         case .changed:
             scaleForStarView = originalScale * scale
+            let factor = scaleForStarView / originalScale
+            for i in 0..<4 {
+                if let corner = originalCornersPix[i] {
+                    let newX = CGFloat(factor) * corner.x
+                    let newY = CGFloat(factor) * corner.y
+                    aladinCornersPix[i] = CGPoint(x:newX,y:newY)
+                }
+                else {
+                    aladinCornersPix[i] = nil
+                }
+            }
             self.setNeedsDisplay()
             break
         case .ended:
@@ -401,7 +417,7 @@ class SkyView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
-        TangoColors.SCARLETRED.setStroke()
+        TangoColors.LIGHT_SCARLETRED.setStroke()
         context.setLineWidth(2.0)
         
         let p = CGPoint(x: 0.0,y: 0.0)
@@ -442,43 +458,43 @@ class SkyView: UIView {
 //        }
 //    }
     
-    // draw lines given their endpoints in ra,dec, used e.g. by drawAladinCorners()
-    func drawLines(_ vals:[(Double,Double,Double,Double)]?) {
-        if (vals != nil) {
-            for val in vals! {
-                var raRadians = val.0 * Double.pi/180.0
-                var decRadians = val.1 * Double.pi/180.0
-                var X = cos(raRadians) * cos(decRadians)
-                var Y = sin(raRadians) * cos(decRadians)
-                var Z = sin(decRadians)
-                
-                guard let p1 = mapXYZ(simd_double3(X,Y,Z)) else {
-                    return
-                }
-                raRadians = val.2 * Double.pi/180.0
-                decRadians = val.3 * Double.pi/180.0
-                X = cos(raRadians) * cos(decRadians)
-                Y = sin(raRadians) * cos(decRadians)
-                Z = sin(decRadians)
-                guard let p2 = mapXYZ(simd_double3(X,Y,Z)) else {
-                    return
-                }
-                plotLine(p1,p2)
-            }
-        }
-    }
+//    // draw lines given their endpoints in ra,dec, used e.g. by drawAladinCorners()
+//    func drawLines(_ vals:[(Double,Double,Double,Double)]?) {
+//        if (vals != nil) {
+//            for val in vals! {
+//                var raRadians = val.0 * Double.pi/180.0
+//                var decRadians = val.1 * Double.pi/180.0
+//                var X = cos(raRadians) * cos(decRadians)
+//                var Y = sin(raRadians) * cos(decRadians)
+//                var Z = sin(decRadians)
+//
+//                guard let p1 = mapXYZ(simd_double3(X,Y,Z)) else {
+//                    return
+//                }
+//                raRadians = val.2 * Double.pi/180.0
+//                decRadians = val.3 * Double.pi/180.0
+//                X = cos(raRadians) * cos(decRadians)
+//                Y = sin(raRadians) * cos(decRadians)
+//                Z = sin(decRadians)
+//                guard let p2 = mapXYZ(simd_double3(X,Y,Z)) else {
+//                    return
+//                }
+//                plotLine(p1,p2)
+//            }
+//        }
+//    }
     
-    func getFov() -> Double {
-        let pOrigin = CGPoint(x: 0,y: 0)
-        let pCorner = CGPoint(x:bounds.size.width,y:bounds.size.height)
-        if let (raOrigin, decOrigin) = unMap(pOrigin),
-            let (raCorner,decCorner) = unMap(pCorner) {
-            let raDif = raCorner - raOrigin
-            let decDif = decCorner - decOrigin
-            return max(raDif,decDif)
-        }
-        return Double.nan
-    }
+//    func getFov() -> Double {
+//        let pOrigin = CGPoint(x: 0,y: 0)
+//        let pCorner = CGPoint(x:bounds.size.width,y:bounds.size.height)
+//        if let (raOrigin, decOrigin) = unMap(pOrigin),
+//            let (raCorner,decCorner) = unMap(pCorner) {
+//            let raDif = raCorner - raOrigin
+//            let decDif = decCorner - decOrigin
+//            return max(raDif,decDif)
+//        }
+//        return Double.nan
+//    }
 
     func drawBullsEyeF() {
         guard let context = UIGraphicsGetCurrentContext(),
@@ -531,17 +547,16 @@ class SkyView: UIView {
             return
         }
 
-        TangoColors.TANGOORANGE.setStroke()
+        TangoColors.LIGHT_SKYBLUE.setStroke()
         context.setLineWidth(3.0)
-        if(aladinCorners.count == 4) {
-            var lines = [(Double,Double,Double,Double)]()
-            lines.append((aladinCorners[0].ra,aladinCorners[0].dec,aladinCorners[1].ra,aladinCorners[1].dec))
-            lines.append((aladinCorners[1].ra,aladinCorners[1].dec,aladinCorners[2].ra,aladinCorners[2].dec))
-            lines.append((aladinCorners[2].ra,aladinCorners[2].dec,aladinCorners[3].ra,aladinCorners[3].dec))
-            lines.append((aladinCorners[3].ra,aladinCorners[3].dec,aladinCorners[0].ra,aladinCorners[0].dec))
-            drawLines(lines)
+        if(aladinCornersAreSet) {
+            plotLine(aladinCornersPix[0],aladinCornersPix[1])
+            plotLine(aladinCornersPix[1],aladinCornersPix[2])
+            plotLine(aladinCornersPix[2],aladinCornersPix[3])
+            plotLine(aladinCornersPix[3],aladinCornersPix[0])
         }
     }
+
     
     func drawConstellationNamesF() {
         let catalog = BrightStarCatalog.shared
@@ -574,6 +589,7 @@ class SkyView: UIView {
 
         let catalog = BrightStarCatalog.shared
         _ = catalog.open()
+        // FASTER drop name from query, just draw the line
         if let lines = catalog.getConstellationLines() {
             for line in lines {
                 drawLine(line.first, line.second)
@@ -595,29 +611,39 @@ class SkyView: UIView {
         strokeCurve(curve)
     }
     
-    func setAladinCorners(_ corners:[(ra:Double,dec:Double)] ){
+    func setAladinCorners(_ corners:[(ra:Double,dec:Double)?] ){
         aladinCorners = corners
+        for i in 0..<4 {
+            // later:  might turn off culling
+            if corners[i] == nil {
+                aladinCornersPix[i] = nil
+            }
+            else {
+                aladinCornersPix[i] = mapRAandDEC(ra: corners[i]!.ra, dec: corners[i]!.dec)
+            }
+            aladinCornersAreSet = true
+        }
     }
     
     func setPhoneCrossHairs(ra:Double,dec:Double) {
         crossHairs = (ra,dec)
     }
 
-    func setFov(_ val:Double) {
-        let cur = getFov()
-        let ratio = val / cur
-        if (!val.isNaN) {
-            scale = scale * ratio
-            setNeedsDisplay()
-        }
-    }
+//    func setFov(_ val:Double) {
+//        let cur = getFov()
+//        let ratio = val / cur
+//        if (!val.isNaN) {
+//            scale = scale * ratio
+//            setNeedsDisplay()
+//        }
+//    }
     
     func fieldOfViewPoints() -> [simd_double3] {
         let scope = Telescope.shared
         let eyepiece = scope.eyepiece
-        let fov = scope.calcTrueFOV(eyepiece) //was 5.5;
-  //      print("fov = \(fov)")
-        let radiusAngle = fov  // was 5.5;
+        let fov = scope.calcTrueFOV(eyepiece)
+
+        let radiusAngle = fov
 
         var points = [simd_double3]()
         let num = 100
@@ -1080,7 +1106,10 @@ class SkyView: UIView {
     }
 
     // map screen x,y back to x,y,z and then to ra,dec
-    func unMap(_ pScreen:CGPoint) -> (ra:Double,dec:Double)? {
+    func unMap(_ pScreen:CGPoint?) -> (ra:Double,dec:Double)? {
+        guard let pScreen = pScreen else {
+            return nil
+        }
         let b = self.bounds
         let cx = (b.maxX + b.minX) / 2.0
         let cy = (b.maxY + b.minY) / 2.0
@@ -1166,40 +1195,40 @@ class SkyView: UIView {
 //            print("ended")
             break
         default:
-            print("unrecognized state")
+            print("unrecognized pan state")
             break
         }
     }
 
-    func histogram(_ array:[Any], min:Double, max:Double, numberOfBuckets:Int) {
-        var buckets = Array(repeating: 0.0, count: numberOfBuckets+1)
-        let del = (max - min) / Double(numberOfBuckets)
-        var mins = [Double]()
-        var maxs = [Double]()
-        var val = min
-        while (val < max) {
-            mins.append(val)
-            val += del
-            maxs.append(val)
-        }
-        
-        for d in array {
-            if let val = d as? Double {
-                for i in 0..<mins.count {
-                    if (val > mins[i] && val <= maxs[i]) {
-                        buckets[i] = buckets[i] + 1
-                    }
-                }
-            }
-        }
-        
-        var sum = 0.0
-        for i in 0..<buckets.count-1 {
-            print(String(format:"%.2f-%.2f\t %.0f",mins[i],maxs[i],buckets[i]))
-            sum = sum + buckets[i]
-        }
-        print("total \(sum)")
-    }
+//    func histogram(_ array:[Any], min:Double, max:Double, numberOfBuckets:Int) {
+//        var buckets = Array(repeating: 0.0, count: numberOfBuckets+1)
+//        let del = (max - min) / Double(numberOfBuckets)
+//        var mins = [Double]()
+//        var maxs = [Double]()
+//        var val = min
+//        while (val < max) {
+//            mins.append(val)
+//            val += del
+//            maxs.append(val)
+//        }
+//
+//        for d in array {
+//            if let val = d as? Double {
+//                for i in 0..<mins.count {
+//                    if (val > mins[i] && val <= maxs[i]) {
+//                        buckets[i] = buckets[i] + 1
+//                    }
+//                }
+//            }
+//        }
+//
+//        var sum = 0.0
+//        for i in 0..<buckets.count-1 {
+//            print(String(format:"%.2f-%.2f\t %.0f",mins[i],maxs[i],buckets[i]))
+//            sum = sum + buckets[i]
+//        }
+//        print("total \(sum)")
+//    }
 }
 
 // you can confirm transform values with astropy.py

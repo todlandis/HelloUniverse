@@ -52,23 +52,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         // hellouniverse://target?survey?fov
-        // host = Optional("target=m98")
-        // host = Optional("target=13 42 11.62 +28 22 38.2")
         if let host = s.url.host {
+            let hostSpaced = host.replacingOccurrences(of: "_", with: " ")
             appDelegate.targetIsFromUrl = true
             if let aladinVC = appDelegate.aladinVC  {
-                aladinVC.searchBar.text = host
+                aladinVC.searchBar.text = hostSpaced
             }
-            appDelegate.initialTarget = host
+            appDelegate.initialTarget = hostSpaced
         }
         
-
-        // query = Optional("fov=5.0?survey=P/DSS2/color")
-      //  print("query = \(s.url.query)")
         if let query = s.url.query {
+            // Macro.copyUrlToClipboard() replaces blanks with underscores
             let components = query.components(separatedBy: "?")
             if components.count > 0 {
-                appDelegate.initialSurvey = components[0]
+                appDelegate.initialSurvey =    components[0]
+                appDelegate.settings?.survey = components[0]
             }
             if components.count > 1 {
                 if let d = Double(components[1]) {
@@ -80,8 +78,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let aladin = appDelegate.aladinVC?.aladin {
             aladin.setImageSurvey(survey: appDelegate.initialSurvey)
             aladin.setFov(appDelegate.initialFOV)
+            
             aladin.gotoObject(name: appDelegate.initialTarget, completionHandler: {
                 (d1,d2,error) in
+                DispatchQueue.main.async {
+                    appDelegate.aladinVC!.updateLabels()
+                }
             })
         }
     }
