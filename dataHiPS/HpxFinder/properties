@@ -1,0 +1,9 @@
+creator_did          = ivo://UNK.AUTH/P/data/meta
+obs_title            = data-meta
+dataproduct_type     = meta
+hips_frame           = equatorial
+hips_order           = 11
+hips_order_min       = 0
+hips_release_date    = 2020-11-14T08:11Z
+hips_version         = 1.4
+hips_builder         = Aladin/HipsGen v11.021
