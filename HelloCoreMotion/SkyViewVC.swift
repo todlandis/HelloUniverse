@@ -29,6 +29,7 @@ class SkyViewVC: UIViewController, SkyViewDelegate {
             appDelegate.skyViewVC = self
             skyView.setGestures(appDelegate: appDelegate)
             skyView.settings = appDelegate.settings
+            skyView.annotations = appDelegate.annotations
             skyView.delegate = self
         }
         unlockButton.alpha = 0.0

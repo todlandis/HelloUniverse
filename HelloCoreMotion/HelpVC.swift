@@ -15,20 +15,23 @@ class HelpVC: UIViewController {
 
         textLabel.text =
         """
-        The Aladin Lite tab is a virtual telescope.  It shows the sky directly above you when the app starts.
+           Search for deep sky objects by name:
+               "NGC 2626",     "Baade's Window", "M3"
 
-        Move the scope using pan gestures and zoom in or out with pinch gestures.
+            Coordinates work too:
+               "38.0 -10.0", "13 14 54.213 +33 10 6.136"
 
-        Target specific objects by entering their names or coordinates.  Try zooming in on "IC 239", "NGC 2626", "Baade's Window", and "M3".
+            Shortcuts:
+               !    show your zenith
 
-        The Sky Map tab is a map of the constellations matching the telesope view.  Move the map around and the telescope will follow.  The orange dots on the map are  Messier objects.
+               1    Visible Light   (DSS)
+               2    Near Infrared   (2MASS)
+               3    Mid Infrared    (AllWISE)
 
-        Enter "!" in the search box to point the telescope and sky map straight up again.  Back where you started.
+               .    Swap surveys
 
-        Enter "?" to see this Help screen.
+            See Settings for more surveys.
         """
-        
-        // Do any additional setup after loading the view.
     }
     
 

@@ -42,60 +42,51 @@ class BrightStarCatalog : SqliteDatabase {
         super.init(fileUrl.absoluteString)
     }
     
-    // calculate ra,dec in messier_list to decimal values using raHMS,decDMS
-    func updateMessierRaDec() {
-        _ = open()
-        var statement: OpaquePointer? = nil
-        if (sqlite3_prepare_v2(database, "select m,raHMS,decDMS from messier_wiki", -1, &statement, nil) != SQLITE_OK) {
-            sqlError();
-        }
-        else {
-            var more:Bool = true
-            repeat {
-                let state = sqlite3_step(statement)
-                if (state == SQLITE_ROW) {
-                    var m = ""
-                    if let tmp = sqlite3_column_text(statement, 0) {
-                        m = String(cString:tmp)
-                    }
-                    
-                    // the abbrev is in 1
-                    var raHMS = ""
-                    if let tmp = sqlite3_column_text(statement, 1) {
-                        raHMS = String(cString:tmp)
-                    }
-
-                    var decDMS = ""
-                    if let tmp = sqlite3_column_text(statement, 2) {
-                        decDMS = String(cString:tmp)
-                    }
-                    
-                    if let ra = Convert.hmsToDecimalDegrees(raHMS),let dec = Convert.dmsToDecimalDegrees(decDMS) {
-                        print("\(m)\t\(ra)\t\(dec)")
-                    }
-                    else {
-                        print("ERROR")
-                    }
-                    
-                }
-                else {
-                    more = false
-                }
-            } while(more)
-        }
-        sqlite3_finalize(statement);
-        close()
-    }
-    
-//    class func testConversion() {
-//        // M47|NGC 2422|–|M47a.jpg|Open cluster|1.6|Puppis|4.2|07 36.6 00|−14 30  00
-//        let raHMS = "07 36.6 00"
-//        let decDMS = "−14 30 00".replacingOccurrences(of: "−", with: "-")
-//        let ra = Convert.hmsToDecimalDegrees(raHMS)
-//        let dec = Convert.dmsToDecimalDegrees(decDMS)
-//        print("\(ra)\t\(dec)")
+//    // calculate ra,dec in messier_list to decimal values using raHMS,decDMS
+//    func updateMessierRaDec() {
+//        _ = open()
+//        var statement: OpaquePointer? = nil
+//        if (sqlite3_prepare_v2(database, "select m,raHMS,decDMS from messier_wiki", -1, &statement, nil) != SQLITE_OK) {
+//            sqlError();
+//        }
+//        else {
+//            var more:Bool = true
+//            repeat {
+//                let state = sqlite3_step(statement)
+//                if (state == SQLITE_ROW) {
+//                    var m = ""
+//                    if let tmp = sqlite3_column_text(statement, 0) {
+//                        m = String(cString:tmp)
+//                    }
+//
+//                    // the abbrev is in 1
+//                    var raHMS = ""
+//                    if let tmp = sqlite3_column_text(statement, 1) {
+//                        raHMS = String(cString:tmp)
+//                    }
+//
+//                    var decDMS = ""
+//                    if let tmp = sqlite3_column_text(statement, 2) {
+//                        decDMS = String(cString:tmp)
+//                    }
+//
+//                    if let ra = Convert.hmsToDecimalDegrees(raHMS),let dec = Convert.dmsToDecimalDegrees(decDMS) {
+//                        print("\(m)\t\(ra)\t\(dec)")
+//                    }
+//                    else {
+//                        print("ERROR")
+//                    }
+//
+//                }
+//                else {
+//                    more = false
+//                }
+//            } while(more)
+//        }
+//        sqlite3_finalize(statement);
+//        close()
 //    }
-    
+        
     func getMessierObjects() -> [(name:String,xs:Double,ys:Double,zs:Double)] {
         var points = [(name:String,xs:Double,ys:Double,zs:Double)]()
 

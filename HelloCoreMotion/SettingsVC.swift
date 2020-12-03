@@ -10,7 +10,7 @@
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-//
+//'''
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
@@ -19,50 +19,6 @@ import UIKit
 
 class SettingsVC: UIViewController, UIPickerViewDelegate,UIPickerViewDataSource {
     var appDelegate:AppDelegate? = nil
-
-    // Surveys that are marked "lite" in this list:
-    // http://aladin.unistra.fr/hips/list
-    let surveys = [
-        //        – Optical –
-        (id:"P/DSS2/color",desc:"Digitized Sky Survey (Color)",type:"Visual", url:"https://archive.eso.org/dss/dss"),
-        (id:"P/DSS2/red",desc:"Digitized Sky Survey (Red)",type:"Visual",url:"https://archive.eso.org/dss/dss"),
-        (id:"P/DSS2/blue",desc:"Digitized Sky Survey (Blue)",type:"Visual",url:"https://archive.eso.org/dss/dss"),
-        
-        (id:"P/SDSS9/color",desc:"SLOAN Digitized Sky Survey", type:"Visual",url:"https://www.sdss.org"),
-        
-        //        – Infrared –
-        (id:"P/2MASS/color",desc:"The Two Micron All Sky Survey", type:"Infrared",url:"https://www.sdss.org"),
-        
-// not infrared?
-//        (id:"P/AKARI/FIS/Color",desc:"AKARI Far Infrared", type:"Far Infrared",url:""),
-
-
-
-        (id:"P/DECaLS/DR3/color",desc:"Dark Energy Survey DR3", type:"", url:""),
-// not responding
-//        (id:"P/DECaPS/DR1/color",desc:"Dark Energy Survey DR1", type:"", url:""),
-        
-        (id:"P/Fermi/color",desc:"Fermi Gamma Ray", type:"Gamma", url:""),
-        (id:"P/Finkbeiner",desc:"Finkbeiner Halpha Composite", type:"Halpha", url:""),
-        (id:"P/GALEXGR6/AIS/color",desc:"GALEX Allsky Imaging Survey", type:"Ultraviolet", url:""),
-        (id:"P/IRIS/color",desc:"IRIS", type:"", url:""),
-
-        (id:"P/Mellinger/color",desc:"Mellinger Color Optical Survey", type:"Visual", url:""),
-        
-        (id:"P/PanSTARRS/DR1/color-z-zg-g",desc:"PanSTARRS color-z-zg-g", type:"", url:""),
-        (id:"P/PanSTARRS/DR1/g",desc:"PanSTARRS g", type:"", url:""),
-        (id:"P/PanSTARRS/DR1/z",desc:"PanSTARRS z", type:"Visual", url:""),
-        
-        (id:"P/SPITZER/color",desc:"SPITZER/color", type:"Infrared", url:""),
-        (id:"P/allWISE/color",desc:"allWISE/color", type:"Infrared", url:""),
-        (id:"P/GLIMPSE360",desc:"GLIMPSE360", type:"Infrared", url:""),
-        (id: "P/VTSS/Ha", desc:"VTSS/Ha", type:"Ha", url:"http://www1.phys.vt.edu/~halpha/"),
-        
-// not responding
-    //    (id: "P/SWIFT_BAT_FLUX",desc:"Swift-BAT X-ray", type:"Hard X Ray", url:""),
-    //    (id: "P/BAT/100-150keV", desc:"P/BAT/100-150keV X-ray", type:"Hard X-ray", url:""),
-    //    (id: "P/XMM/PN/color", desc:"P/XMM/PN/color", type:"", url:"")
-    ]
         
     @IBOutlet weak var gridLinesSwitch: UISwitch!
     @IBOutlet weak var constellationLinesSwitch: UISwitch!
@@ -98,8 +54,8 @@ class SettingsVC: UIViewController, UIPickerViewDelegate,UIPickerViewDataSource 
             messierSwitch.isOn = settings.drawMessier
             plusSignSwtich.isOn = settings.drawPlusSigns
             
-            for i in 0..<surveys.count {
-                if surveys[i].id == settings.survey {
+            for i in 0..<settings.surveys.count {
+                if settings.surveys[i].id == settings.survey {
                     surveyPicker.selectRow(i, inComponent: 0, animated: false)
                     break
                 }
@@ -190,9 +146,9 @@ class SettingsVC: UIViewController, UIPickerViewDelegate,UIPickerViewDataSource 
     // MARK:  UIPickerViewDelegate
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if let settings = appDelegate?.settings {
-            if row < surveys.count {
-                settings.survey = surveys[row].id
-                appDelegate?.initialSurvey = surveys[row].id
+            if row < settings.surveys.count {
+                settings.survey = settings.surveys[row].id
+                appDelegate?.initialSurvey = settings.surveys[row].id
             }
         }
     }
@@ -204,14 +160,24 @@ class SettingsVC: UIViewController, UIPickerViewDelegate,UIPickerViewDataSource 
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return surveys.count
+        if let settings = appDelegate?.settings {
+            return settings.surveys.count
+        }
+        else {
+            return 0
+            
+        }
     }
 
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-  //      print("component = \(row)")
-         let font:UIFont = UIFont(name: "Helvetica Neue", size: 18.0)!
-        return row < surveys.count ? NSAttributedString(string: surveys[row].desc, attributes: [
-        NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue) : font, NSAttributedString.Key.foregroundColor : UIColor.white]) : nil
+        if let settings = appDelegate?.settings {
+            let font:UIFont = UIFont(name: "Helvetica Neue", size: 18.0)!
+            return row < settings.surveys.count ? NSAttributedString(string: settings.surveys[row].desc, attributes: [
+                NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue) : font, NSAttributedString.Key.foregroundColor : UIColor.white]) : nil
+        }
+        else {
+            return nil
+        }
     }
 
 }

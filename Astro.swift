@@ -24,7 +24,7 @@ class Astro {
     
     // map (ra,dec) -> (alt,az) for a given time and location
     // http://star-www.st-and.ac.uk/~fv/webnotes/chapter7.htm
-    class func altAz(ra:Double, dec:Double, date:Date, lat:Double, lon:Double) -> (alt:Double,az:Double) {
+    class func raDecToAltAz(ra:Double, dec:Double, date:Date, lat:Double, lon:Double) -> (alt:Double,az:Double) {
         
         var H = localMeanSiderealTime(date: date, longitude: lon) - ra
         
@@ -133,70 +133,45 @@ class Astro {
         return (ra:localMeanSiderealTime(date: date, longitude: longitude), dec:latitude)
     }
     
-    class func test() {
-        let lat = 38.0
-        let lon = -122.0
-        let now = Date()
-        for j in 0...36 {
-            print()
-            let ra = Double(j) * 10.0
-            for i in 0...18 {
-                let dec = Double(i) * 10.0 - 90.0
-                //  print(dec)
-                let (alt,az) = altAz(ra: ra,dec: dec, date:now, lat: lat, lon:lon)
-                let (ra2,dec2) = raDec(altitude: alt, azimuth: az, date: now, lat: lat, lon: lon)
-                if (fabs(ra2 - ra) > 10e-10 &&  fabs(ra2 - ra) < 359.9) || fabs(dec2 - dec) > 10e-10 {
-                    print("\(ra),\(dec)    ra diff:\(fabs(ra-ra2)),  dec diff:\(fabs(dec-dec2))")
-                }
-                else {
-                    print("\(ra),\(dec) ")
-                }
-            }
+    
+    
+    class func test20() {
+        // p 49, in Practical Astronomy by Duffet-Smith and Zwert
+        let then = makeDate("1998-01-01 00 24 05 +0000")!
+        let alt = Convert.dmsToDecimalDegrees("19 20 3.64")!
+        let az = Convert.dmsToDecimalDegrees("283 16 15.7")!
+        let (ra,dec) = Astro.altAzToRaDec(altitude: alt, azimuth: az, date: then, lat: 52.0, lon: 0.0)
+        print("ra = \(Convert.decimalDegreesToHMS(ra))")
+        print("dec = \(Convert.decimalDegreesToDMS(dec))")
+    }
+    
+    class func altAzToRaDec(altitude:Double, azimuth:Double, date:Date, lat:Double, lon:Double) -> (ra:Double,dec:Double) {
+        
+        let altR = altitude * Double.pi/180.0
+        let azimuthR = azimuth * Double.pi/180.0
+        let latR = lat *  Double.pi/180.0
+        
+        //        sin(dec) = sin(alt)*sin(lat) + cos(alt)*cos(lat)*cos(az)
+       // let sum = sin(altR) * sin(latR) + cos(altR) * cos(latR) * cos(azimuthR)
+        //print("sum = \(sum)")
+        
+        let dec = asin(sin(altR) * sin(latR) + cos(altR) * cos(latR) * cos(azimuthR))
+      //  print("dec = \(dec * 180.0/Double.pi)")
+        
+        //cos(H) = { sin(a) - sin(δ) sin(φ)} / cos(δ) cos(φ)
+      //  print((sin(altR) - sin(dec)*sin(latR)) / (cos(dec) * cos(latR)))
+        var H = acos((sin(altR) - sin(dec)*sin(latR)) / (cos(dec) * cos(latR)))
+     //   print("H' = \(H * 180.0/Double.pi)")
+
+        let test = sin(azimuthR)
+        if test > 0 {
+            H = (2.0 * Double.pi) - H
         }
-    }
-    
-    // 140.0,50.0    ra diff:139.38729137250544,  dec diff:0.0
-    class func testX() {
-        let lat = 38.0
-        let lon = -122.0
-        let ra = 140.0
-        let dec = 50.0
-        let now = Date()
-        print((ra,dec))
-        let (alt,az) = altAz(ra: ra,dec: dec, date:now, lat: lat, lon:lon)
-        let (ra2,dec2) = raDec(altitude: alt, azimuth: az, date: now, lat: lat, lon: lon)
-        print((ra2,dec2))
-    }
-    
-    class func test5() {
-        // values from http://www.stargazing.net/kepler/altaz.html
         
-        let now = makeDate("1998-08-10 23:10:00 +0000")!
-        let lat = 52.5
-        let lon = -1.9166667
-        let ra = 250.425
-        let dec = 36.466667
-        
-        print((ra,dec))
-        let (alt,az) = altAz(ra: ra,dec: dec,date: now,lat:lat,lon:lon)
-        print((alt,az))
-// calculated here
-//        (49.168868703951716, 269.1466694831747)
-// matches web site
-//        49.169122 degs = 49 d + 0.169122 * 60 min =  49 d 10 min
-//        269.14634 degs = 269 d + 0.14634 * 60 min = 269 d  9 min
-
-        let (ra2,dec2) = raDec(altitude: alt, azimuth: az, date: now, lat: lat, lon: lon)
-        print((ra2,dec2))
-
+        return (H * 180.0/Double.pi,dec * 180.0/Double.pi)
     }
     
-    // still work in progress
-    class func raDec(altitude:Double, azimuth:Double, date:Date, lat:Double, lon:Double) -> (ra:Double,dec:Double) {
-        
-        return (ra:0,dec:0)
-    }
-    
+      
     // map (ra,dec) to (x,y,z) on the unit sphere
     //
     // (0,0) -> (1,0,0)
@@ -271,7 +246,7 @@ class Astro {
         let dec = 36.466667
         
         print((ra,dec))
-        let (alt,az) = altAz(ra: ra,dec: dec,date: now,lat:lat,lon:lon)
+        let (alt,az) = raDecToAltAz(ra: ra,dec: dec,date: now,lat:lat,lon:lon)
         print((alt,az))
 // calculated here
 //        (49.168868703951716, 269.1466694831747)
@@ -279,7 +254,7 @@ class Astro {
 //        49.169122 degs = 49 d + 0.169122 * 60 min =  49 d 10 min
 //        269.14634 degs = 269 d + 0.14634 * 60 min = 269 d  9 min
 
-        let (ra2,dec2) = raDec(altitude: alt, azimuth: az, date: now, lat: lat, lon: lon)
+        let (ra2,dec2) = altAzToRaDec(altitude: alt, azimuth: az, date: now, lat: lat, lon: lon)
         print((ra2,dec2))
 
     }

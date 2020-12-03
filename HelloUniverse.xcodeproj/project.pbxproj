@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D30744182579A78200E0C5D9 /* SkyViewTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744152579A78200E0C5D9 /* SkyViewTransform.swift */; };
+		D30744192579A78200E0C5D9 /* Annotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744162579A78200E0C5D9 /* Annotations.swift */; };
+		D307441A2579A78200E0C5D9 /* SkyViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */; };
 		D31E5D1224D3B87C0013B254 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E5D1124D3B87C0013B254 /* AppDelegate.swift */; };
 		D31E5D1424D3B87C0013B254 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E5D1324D3B87C0013B254 /* SceneDelegate.swift */; };
 		D31E5D1924D3B87C0013B254 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D31E5D1724D3B87C0013B254 /* Main.storyboard */; };
@@ -41,6 +44,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D30744152579A78200E0C5D9 /* SkyViewTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SkyViewTransform.swift; path = skyview/SkyViewTransform.swift; sourceTree = SOURCE_ROOT; };
+		D30744162579A78200E0C5D9 /* Annotations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Annotations.swift; path = skyview/Annotations.swift; sourceTree = SOURCE_ROOT; };
+		D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SkyViewOverlay.swift; path = skyview/SkyViewOverlay.swift; sourceTree = SOURCE_ROOT; };
 		D31E5D0E24D3B87C0013B254 /* HelloUniverse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloUniverse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D31E5D1124D3B87C0013B254 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D31E5D1324D3B87C0013B254 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +131,9 @@
 				D31E5D1124D3B87C0013B254 /* AppDelegate.swift */,
 				D31E5D1324D3B87C0013B254 /* SceneDelegate.swift */,
 				D349222B24E3758F007560B5 /* AladinVC.swift */,
+				D30744162579A78200E0C5D9 /* Annotations.swift */,
+				D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */,
+				D30744152579A78200E0C5D9 /* SkyViewTransform.swift */,
 				D35D7A5F24E3BCD5001F5E66 /* SkyViewVC.swift */,
 				D3940EF024EA41FC00A69907 /* SettingsVC.swift */,
 				D363158E253FB05D000E9FBC /* HelpVC.swift */,
@@ -245,9 +254,11 @@
 				D349222C24E3758F007560B5 /* AladinVC.swift in Sources */,
 				D31E5D1224D3B87C0013B254 /* AppDelegate.swift in Sources */,
 				D35D7A5824E3B399001F5E66 /* Star.swift in Sources */,
+				D307441A2579A78200E0C5D9 /* SkyViewOverlay.swift in Sources */,
 				D363158F253FB05D000E9FBC /* HelpVC.swift in Sources */,
 				D35D7A6024E3BCD5001F5E66 /* SkyViewVC.swift in Sources */,
 				D38EB2CD24DA328400CB55C3 /* Astro.swift in Sources */,
+				D30744192579A78200E0C5D9 /* Annotations.swift in Sources */,
 				D35D7A5C24E3B852001F5E66 /* TangoColors.swift in Sources */,
 				D35D7A5624E3B2E4001F5E66 /* SqliteDatabase.swift in Sources */,
 				D35D7A5224E3A6CF001F5E66 /* Matrix.swift in Sources */,
@@ -260,6 +271,7 @@
 				D349222624E12401007560B5 /* LatLonFinder.swift in Sources */,
 				D3A45479253B88BD00DA4904 /* DeviceAttitude.swift in Sources */,
 				D31E5D1424D3B87C0013B254 /* SceneDelegate.swift in Sources */,
+				D30744182579A78200E0C5D9 /* SkyViewTransform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

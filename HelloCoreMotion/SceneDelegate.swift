@@ -66,7 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let components = query.components(separatedBy: "?")
             if components.count > 0 {
                 appDelegate.initialSurvey =    components[0]
-                appDelegate.settings?.survey = components[0]
+                appDelegate.settings.survey = components[0]
             }
             if components.count > 1 {
                 if let d = Double(components[1]) {

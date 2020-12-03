@@ -32,10 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var aladinVC:AladinVC? = nil
     var skyViewVC:SkyViewVC? = nil
     var settingsVC:SettingsVC? = nil
-
+    
     
 //    var heartBeat:Heartbeat? = nil
-    var settings:Settings?  = Settings()
+    var settings:Settings  = Settings()
+    var annotations = Annotations()
+    
     var macro:Macro = Macro()
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

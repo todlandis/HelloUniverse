@@ -18,13 +18,95 @@ import UIKit
 
 class Macro {
     
-    func process(_ s:String) {
-        let start = s.index(s.startIndex, offsetBy: 1)
-        let range = start..<s.endIndex
-        let s = String(s[range]).trimmingCharacters(in: .whitespaces)
-        print(s)
+    func process(_ text:String) {
+        let components = text.components(separatedBy: " ")
+        let cmd = components[0]
+        
+        let startTail = text.index(text.startIndex, offsetBy: cmd.count)
+        //            let end =   text.index(text.endIndex, offsetBy:0)
+        let rangeTail = startTail..<text.endIndex
+        let tail = String(text[rangeTail]).trimmingCharacters(in: .whitespaces)
+        
+        switch(cmd) {
+        case ":s",":S",":show":
+            // s (object name) - go to object, and a label for its name there)
+            if #available(iOS 14.0, *) {
+                show(tail)
+            } else {
+                print("SHOW requires iOS 14.0")
+            }
+            break
+        case ":l", ":L",":label":
+            // add a label at the current center of the view
+            labelCenter(tail)
+            break
+        case ":u", ":U",":url":
+            copyUrlToClipboard()
+            break
+        case ":custom":
+            customImageSurvey()
+            break
+        default:
+            break
+        }
     }
     
+    func customImageSurvey() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
+            return
+        }
+
+        aladin.customImageSurvey()
+    }
+
+    // center object "text" and label it
+    @available(iOS 14.0, *)
+    func show(_ text:String) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
+            return
+        }
+
+        aladin.getRaDec() {
+            ra2,dec2,err in
+            print("before show ra2:\(ra2)  dec2:\(dec2)")
+        }
+        
+        aladin.gotoObjectX(object: text, completionHandler:{
+            error in
+    
+            if error == nil {
+                aladin.getRaDec(completionHandler: {
+                    ra2,dec2,err in
+                    print("show ra2:\(ra2)  dec2:\(dec2)")
+                    appDelegate.annotations.addLabel(text: text, ra: ra2, dec: dec2)
+                    //LATER annotations delegate sends out change notifications
+                    appDelegate.aladinVC?.whoIsThatBehindTheScreen.setNeedsDisplay()
+                    appDelegate.skyViewVC?.skyView.setNeedsDisplay()
+                })
+            }
+            else {
+                print("show NOT FOUND")
+            }
+        })
+    }
+    
+    func labelCenter(_ text:String) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
+            return
+        }
+
+
+        aladin.getRaDec(completionHandler: {
+            ra,dec,err in
+            appDelegate.annotations.addLabel(text: text, ra: ra, dec: dec)
+            //LATER annotations delegate sends out change notifications
+            DispatchQueue.main.async {
+                appDelegate.aladinVC?.whoIsThatBehindTheScreen.setNeedsDisplay()
+                appDelegate.skyViewVC?.skyView.setNeedsDisplay()
+            }
+        })
+
+    }
     // copy a URL duplicating the current Hello Universe view
     func copyUrlToClipboard() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
@@ -34,7 +116,7 @@ class Macro {
         aladin.getRaDec(completionHandler: {
             (ra,dec,error) in
             
-            // version 1.1 won't read these underscores in a URL
+            // versiaon 1.1 won't read these underscores in a URL
             let coord = Convert.raDecToIcrs(ra:ra, dec:dec, underscored: true)
             
             aladin.getFov(completionHandler: {

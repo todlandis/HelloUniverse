@@ -32,25 +32,34 @@ class SkyView: UIView {
     var gridLineColor = UIColor(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
     let bullsEyeColor = UIColor(displayP3Red: 1.0, green: 0.0, blue: 0.0, alpha: CGFloat(0.6))
 
-    var culling = true                    // see mapXYZ
+ //   var labels = [Label]()
+    let labelFont = UIFont(name: "Helvetica Neue", size: 24)
+    let labelColor = TangoColors.BUTTER
 
-    var translationVector = simd_double3(0,0,0)
-    var decAngle:Double = 0.0           // degrees
-    var raAngle:Double = 0.0            // degrees
-    var latAngle:Double = 0.0
-    var rotationMatrix = matrix_identity_double3x3
-    var inverseRotationMatrix = matrix_identity_double3x3
     
-    // this makes a 2.5D projection and flips the z axis
-    // x is 'right', y is 'into the screen', z is 'up',
-    // y values will be used for culling
-    var projectionMatrix:simd_double3x2 = simd_double3x2(simd_double2(1.0,0.0),simd_double2(0.0,0.0),simd_double2(0.0,-1.0))
+    // transform start
+    let skyViewTransform:SkyViewTransform = SkyViewTransform()
     
-    var scaleForStarView = 400.0
-    var scale:Double = 400.0     // set for each draw
+//    var culling = true                    // see mapXYZ
+//
+//    var translationVector = simd_double3(0,0,0)
+//    var decAngle:Double = 0.0           // degrees
+//    var raAngle:Double = 0.0            // degrees
+//    var latAngle:Double = 0.0
+//    var rotationMatrix = matrix_identity_double3x3
+//    var inverseRotationMatrix = matrix_identity_double3x3
+//
+//    // this makes a 2.5D projection and flips the z axis
+//    // x is 'right', y is 'into the screen', z is 'up',
+//    // y values will be used for culling
+//    var projectionMatrix:simd_double3x2 = simd_double3x2(simd_double2(1.0,0.0),simd_double2(0.0,0.0),simd_double2(0.0,-1.0))
+//
+//    var scaleForStarView = 400.0
+//    var scale:Double = 400.0     // set for each draw
+    // transform end
 
-    // see SkyViewVC.viewDidLoad()
     var settings:Settings? = nil
+    var annotations:Annotations? = nil
     
     var circlePoints = [(ra:Double,dec:Double)]()
     var boxPoints =    [(ra:Double,dec:Double)]()
@@ -65,9 +74,8 @@ class SkyView: UIView {
     // see drawCrossHairs() below
     var crossHairs:(ra:Double,dec:Double)? = nil
     
-    var starLabels = [String]()  // deprecated
-    
-    var labels = [(s:String,(x:Double,y:Double,z:Double))]()
+//    var starLabels = [String]()  // deprecated
+//    var labels = [(s:String,(x:Double,y:Double,z:Double))]()
     
     var messierFont:UIFont? = nil
     var appDelegate:AppDelegate? = nil
@@ -108,7 +116,7 @@ class SkyView: UIView {
         let cy = (b.maxY + b.minY) / 2.0
         context.translateBy(x: cx, y: cy)
 
-        scale = scaleForStarView
+        skyViewTransform.scale = skyViewTransform.scaleForStarView
         drawStarView(rect)
 
 //        print("scale = \(scale)")
@@ -119,13 +127,11 @@ class SkyView: UIView {
     var originalScale:Double = 1.0
     
     func getRaDec() -> (ra:Double,dec:Double) {
-        return(raAngle,decAngle)
+        return(skyViewTransform.raAngle,skyViewTransform.decAngle)
     }
     
     func gotoRaDec(ra:Double,dec:Double) {
-        decAngle = dec
-        raAngle = ra
-        updateMatrices()
+        skyViewTransform.gotoRaDec(ra:ra,dec:dec)
         setNeedsDisplay()
     }
 
@@ -145,12 +151,12 @@ class SkyView: UIView {
         switch recognizer.state {
         case .began:
             //          print("began")(
-            originalScale = scaleForStarView
+            originalScale = skyViewTransform.scaleForStarView
             originalCornersPix = aladinCornersPix
             break
         case .changed:
-            scaleForStarView = originalScale * scale
-            let factor = scaleForStarView / originalScale
+            skyViewTransform.scaleForStarView = originalScale * scale
+            let factor = skyViewTransform.scaleForStarView / originalScale
             for i in 0..<4 {
                 if let corner = originalCornersPix[i] {
                     let newX = CGFloat(factor) * corner.x
@@ -174,32 +180,32 @@ class SkyView: UIView {
     
     let catalog = BrightStarCatalog.shared
     
-    // map a point from space x,y,z to screen x,y
-    //
-    // the mapping consists of
-    //           a translation in xyz
-    //           a rotation in xyz
-    //           projection to 2D
-    //           a scaling
-    func mapXYZ(_ pIn:simd_double3) -> CGPoint? {
-        let pRotated = rotationMatrix * (pIn + translationVector)
-        
-        if(culling && pRotated.y < 0) {
-            return nil          // culled
-        }
-        
-        let pIn = scale * projectionMatrix * pRotated
-        return CGPoint(x:pIn.x,y:pIn.y)
-    }
-    
-    
-    // set rotationMatrix so that latAngle,decAngle is centered, pointing
-    //    into the screen & calculate its inverse for unMap()
-    func updateMatrices() {
-        rotationMatrix = Matrix.rotationAroundY(degrees:latAngle) * Matrix.rotationAroundX(degrees:decAngle) * Matrix.rotationAroundZ(degrees:  raAngle-90.0)
-        inverseRotationMatrix =
-            Matrix.rotationAroundZ(degrees:  90.0 - raAngle) * Matrix.rotationAroundX(degrees:-decAngle) * Matrix.rotationAroundY(degrees:-latAngle)
-    }
+//    // map a point from space x,y,z to screen x,y
+//    //
+//    // the mapping consists of
+//    //           a translation in xyz
+//    //           a rotation in xyz
+//    //           projection to 2D
+//    //           a scaling
+//    func mapXYZ(_ pIn:simd_double3) -> CGPoint? {
+//        let pRotated = rotationMatrix * (pIn + translationVector)
+//        
+//        if(culling && pRotated.y < 0) {
+//            return nil          // culled
+//        }
+//        
+//        let pIn = scale * projectionMatrix * pRotated
+//        return CGPoint(x:pIn.x,y:pIn.y)
+//    }
+//    
+//    
+//    // set rotationMatrix so that latAngle,decAngle is centered, pointing
+//    //    into the screen & calculate its inverse for unMap()
+//    func updateMatrices() {
+//        rotationMatrix = Matrix.rotationAroundY(degrees:latAngle) * Matrix.rotationAroundX(degrees:decAngle) * Matrix.rotationAroundZ(degrees:  raAngle-90.0)
+//        inverseRotationMatrix =
+//            Matrix.rotationAroundZ(degrees:  90.0 - raAngle) * Matrix.rotationAroundX(degrees:-decAngle) * Matrix.rotationAroundY(degrees:-latAngle)
+//    }
     
 
     // set content mode to "Redraw" so resizes trigger a redraw
@@ -209,10 +215,10 @@ class SkyView: UIView {
             return
         }
 
-        updateMatrices()
-        scale = scaleForStarView
+        skyViewTransform.updateMatrices()
+        skyViewTransform.scale = skyViewTransform.scaleForStarView
      //   print("scale = \(scale)")
-        translationVector = simd_double3(0,0,0)
+        skyViewTransform.translationVector = simd_double3(0,0,0)
                         
         if settings.drawGrid { drawGridLinesF() }
         
@@ -230,8 +236,8 @@ class SkyView: UIView {
         
 //        drawCirclePoints()
 //        drawBoxPoints()
-//        drawLabels()
-//
+        drawLabels()
+
         if(settings.drawFOV) { drawFieldOfView()}
 
         if(settings.drawAladin) { drawAladinCorners() }
@@ -298,7 +304,7 @@ class SkyView: UIView {
         var dec = -Double.pi/2.0
         
         let raRadians = angle * Double.pi/180.0   // 0 - 360 in
-        for _ in 0...num { //hack {
+        for _ in 0...num { 
             let X = cos(raRadians) * cos(dec)
             let Y = sin(raRadians) * cos(dec)
             let Z = sin(dec)
@@ -320,7 +326,7 @@ class SkyView: UIView {
             var p0:CGPoint? = nil
             var i = iIn
             while(p0 == nil && i < curve.count) {
-                p0 = mapXYZ(curve[i])
+                p0 = skyViewTransform.mapXYZ(curve[i])
                 i = i+1
             }
             if(p0 == nil) {
@@ -329,7 +335,7 @@ class SkyView: UIView {
             context.move(to: CGPoint(x: p0!.x,y: p0!.y))
             
             for j in i..<curve.count {
-                let p = mapXYZ(curve[j])
+                let p = skyViewTransform.mapXYZ(curve[j])
                 if(p == nil) {
                     // we are hidden
                     if(j != i) {
@@ -392,7 +398,6 @@ class SkyView: UIView {
             circlePoint(ra: ra,dec: dec)
         }
     }
-
     
     func labelAt(ra:Double,dec:Double,label:String, color:UIColor) {
         if let p = mapRAandDEC(ra:ra,dec:dec) {
@@ -452,12 +457,27 @@ class SkyView: UIView {
         }
     }
 
-//    func drawLabels() {
-//        for name in starLabels {
-//            labelStar(name)
-//        }
-//    }
+    func drawLabels() {
+        if let annotations = annotations {
+            for label in annotations.labels {
+                drawLabel(label)
+            }
+        }
+    }
     
+    
+    func drawLabel(_ label:Label) {
+        guard let labelFont = labelFont else {
+            return
+        }
+        let attributes: [NSAttributedString.Key : Any] = [
+            NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue) : labelFont, NSAttributedString.Key.foregroundColor : labelColor]
+        
+        if let p = mapRAandDEC(ra: label.ra, dec: label.dec){
+            label.text.draw(at:CGPoint(x: p.x, y: p.y), withAttributes: attributes)
+        }
+    }
+
 //    // draw lines given their endpoints in ra,dec, used e.g. by drawAladinCorners()
 //    func drawLines(_ vals:[(Double,Double,Double,Double)]?) {
 //        if (vals != nil) {
@@ -571,10 +591,10 @@ class SkyView: UIView {
 
     func drawConstellationLinesF() {
         func drawLine(_ first:(x:Double,y:Double,z:Double),_ second:(x:Double,y:Double,z:Double)) {
-            guard let p1 = mapXYZ(simd_double3(first.x,first.y,first.z)) else {
+            guard let p1 = skyViewTransform.mapXYZ(simd_double3(first.x,first.y,first.z)) else {
                 return
             }
-            guard let p2 = mapXYZ(simd_double3(second.x,second.y,second.z)) else {
+            guard let p2 = skyViewTransform.mapXYZ(simd_double3(second.x,second.y,second.z)) else {
                 return
             }
             plotLine(p1,p2)
@@ -654,7 +674,7 @@ class SkyView: UIView {
         let decRadians = (90 - radiusAngle) * Double.pi/180.0    // -90 to 90 gives a range of 180 in
 
 
-        let matrix =  Matrix.rotationAroundZ(degrees: 90 - raAngle) * Matrix.rotationAroundX(degrees: 90 - decAngle)
+        let matrix =  Matrix.rotationAroundZ(degrees: 90 - skyViewTransform.raAngle) * Matrix.rotationAroundX(degrees: 90 - skyViewTransform.decAngle)
 
         for _ in 0...num {
             let X = cos(ra) * cos(decRadians)
@@ -699,7 +719,7 @@ class SkyView: UIView {
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
         
@@ -752,7 +772,7 @@ class SkyView: UIView {
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 
@@ -775,7 +795,7 @@ class SkyView: UIView {
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 
@@ -801,7 +821,7 @@ class SkyView: UIView {
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 
@@ -814,7 +834,7 @@ class SkyView: UIView {
 
     func plotMessier(label:String,x:Double,y:Double,z:Double) {
         // user can zoom in to see the labels
-        if scale > 750.0 {
+        if skyViewTransform.scale > 750.0 {
             plotLabel(x,y,z, label, font:messierFont!, color:settings!.messierColor)
         }
         diamondPoint(x: x,y: y,z: z)
@@ -831,7 +851,7 @@ class SkyView: UIView {
 //        let Y = sin(raRadians) * cos(decRadians)
 //        let Z = sin(decRadians)
         
-        guard let pIn = mapXYZ(simd_double3(x,y,z)) else {
+        guard let pIn = skyViewTransform.mapXYZ(simd_double3(x,y,z)) else {
             return
         }
         
@@ -860,7 +880,7 @@ class SkyView: UIView {
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 
@@ -903,7 +923,7 @@ class SkyView: UIView {
         }
 
         // pre-culling
-        if let w = Astro.raDecToXYZ(ra: raAngle, dec: decAngle) {    // do this once per draw
+        if let w = Astro.raDecToXYZ(ra: skyViewTransform.raAngle, dec: skyViewTransform.decAngle) {    // do this once per draw
             let v = simd_double3(star.xs,star.ys,star.zs)      // save this
             let dotted = dot(v,w)                  // cosine of angle between v and w
             if dotted < 0 {
@@ -915,7 +935,7 @@ class SkyView: UIView {
         let Y = star.ys
         let Z = star.zs
         
-        let size = magnitudeToSize(star.magnitude, zoomed: scale > 1000)
+        let size = magnitudeToSize(star.magnitude, zoomed: skyViewTransform.scale > 1000)
         
 //FASTER:  XYZ is mapped twice:  once for star, once for label
         plotXYZ(X,Y,Z,size)
@@ -927,7 +947,7 @@ class SkyView: UIView {
         var label:String = ""
         let ZOOMED_ENOUGH = 5000.0
         if(settings.drawCommonNames) {
-            if scale > ZOOMED_ENOUGH {
+            if skyViewTransform.scale > ZOOMED_ENOUGH {
                 // every bright star gets at least HR
                 if star.commonName.count > 0 {
                     label = star.commonName
@@ -936,7 +956,7 @@ class SkyView: UIView {
                     label = String(format:"HR %d",star.hr)
                 }
             }
-            else if (g == "α" || scale > 1000.0) {
+            else if (g == "α" || skyViewTransform.scale > 1000.0) {
                 label = star.commonName
             }
         }
@@ -951,19 +971,19 @@ class SkyView: UIView {
         }
         
         if settings.drawMagnitude {
-            if scale > ZOOMED_ENOUGH {
+            if skyViewTransform.scale > ZOOMED_ENOUGH {
                 label = label.appending(" ").appending(String(format:"%.1f",star.magnitude))
             }
         }
         
         if settings.drawSpectralType {
-            if scale > ZOOMED_ENOUGH {
+            if skyViewTransform.scale > ZOOMED_ENOUGH {
                 label = label.appending(" ").appending(star.spectralType)
             }
         }
         
         if settings.drawParsecs {
-            if scale > ZOOMED_ENOUGH {
+            if skyViewTransform.scale > ZOOMED_ENOUGH {
                 label = label.appending(" ").appending(String(format:"%.1f pc",star.parsecs))
             }
         }
@@ -977,7 +997,7 @@ class SkyView: UIView {
     // this is going away
     func plotLabel(_ X:Double,_ Y:Double,_ Z:Double,_ label:String, _ size:CGFloat = 24.0, color:UIColor = TangoColors.LIGHT_CHARCOAL) {
 
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
         let size_2 = CGFloat(size/2.0)
@@ -991,7 +1011,7 @@ class SkyView: UIView {
     }
 
     func plotLabel(_ X:Double,_ Y:Double,_ Z:Double,_ label:String, font:UIFont, color:UIColor) {
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 //        let size_2 = Double(size/2.0)
@@ -1012,7 +1032,7 @@ class SkyView: UIView {
             return
         }
         
-        guard let p = mapXYZ(simd_double3(X,Y,Z)) else {
+        guard let p = skyViewTransform.mapXYZ(simd_double3(X,Y,Z)) else {
             return
         }
 
@@ -1024,68 +1044,68 @@ class SkyView: UIView {
     // there are limitations, this reverse mappinggives funny results within
     // about 3 degrees of the north or south pole (dec = +/- 90)
     //            e.g. 180,-89   ->   nan,nan
-    func testOLD () {
-        print()
-        print()
-//        print(atan2(sin(0.0),cos(0.0)))
-//        print(atan2(0.0,1.0))
-
-        let raIn:Double =   180.0          // 0 to 360 allowed
-        let decIn:Double = -87.0       // -90 to 90 allowed
-        print("test put in \(raIn) \(decIn)")
-        
-        let raRadians:Double = raIn * Double.pi/180.0
-        let decRadians:Double = decIn * Double.pi/180.0
-        print("raRadians \(raRadians)   decRadians \(decRadians)")
-        
-        let X = cos(raRadians) * cos(decRadians)
-        let Y = sin(raRadians) * cos(decRadians)
-        let Z = sin(decRadians)                  // easy to recover decRadians!
-                                                 // decRadians= asin(z)  asin returns a value in - pi/2 to pi/2
-                                                 //    which matches the range of possible decRadians
-
-        let q =   simd_double3(X,Y,Z)
-
-        let qRotated =   rotationMatrix * q
-//print("after rotating q \(qRotated)")
-        
-        let qProjected = projectionMatrix * qRotated
-//        print("q2 after projecting \(qProjected)")
-        
-        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
- //       print("after unprojecting\(qUnprojected)")
- //       print("difference after unprojecting \(qUnprojected-qRotated)")
-        
-        let qUnrotated = inverseRotationMatrix * qUnprojected
- //       print("after unrotating XYZ = \(qUnrotated.x) \(qUnrotated.y) \(qUnrotated.z)")
-
-        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
-        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
-        let  decRadiansBack = asin(qUnrotated.z)
-        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
-        
-        let raBack = raRadiansBack * 180.0/Double.pi
-        let decBack = decRadiansBack * 180.0/Double.pi
-        
-        print("test get back ra = \(raBack)  dec = \(decBack)")
-    }
-    
-    func test2() {
-        let qProjected = simd_double2(x:0.0,y:0.0)
-        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
-        
-        let qUnrotated = inverseRotationMatrix * qUnprojected
-        
-        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
-        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
-        let  decRadiansBack = asin(qUnrotated.z)
-        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
-        
-        let raBack = raRadiansBack * 180.0/Double.pi
-        let decBack = decRadiansBack * 180.0/Double.pi
-        
-        print("test2  ra = \(raBack)  dec = \(decBack)")
-    }
+//    func testOLD () {
+//        print()
+//        print()
+////        print(atan2(sin(0.0),cos(0.0)))
+////        print(atan2(0.0,1.0))
+//
+//        let raIn:Double =   180.0          // 0 to 360 allowed
+//        let decIn:Double = -87.0       // -90 to 90 allowed
+//        print("test put in \(raIn) \(decIn)")
+//
+//        let raRadians:Double = raIn * Double.pi/180.0
+//        let decRadians:Double = decIn * Double.pi/180.0
+//        print("raRadians \(raRadians)   decRadians \(decRadians)")
+//
+//        let X = cos(raRadians) * cos(decRadians)
+//        let Y = sin(raRadians) * cos(decRadians)
+//        let Z = sin(decRadians)                  // easy to recover decRadians!
+//                                                 // decRadians= asin(z)  asin returns a value in - pi/2 to pi/2
+//                                                 //    which matches the range of possible decRadians
+//
+//        let q =   simd_double3(X,Y,Z)
+//
+//        let qRotated =   rotationMatrix * q
+////print("after rotating q \(qRotated)")
+//
+//        let qProjected = projectionMatrix * qRotated
+////        print("q2 after projecting \(qProjected)")
+//
+//        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
+// //       print("after unprojecting\(qUnprojected)")
+// //       print("difference after unprojecting \(qUnprojected-qRotated)")
+//
+//        let qUnrotated = inverseRotationMatrix * qUnprojected
+// //       print("after unrotating XYZ = \(qUnrotated.x) \(qUnrotated.y) \(qUnrotated.z)")
+//
+//        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+//        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
+//        let  decRadiansBack = asin(qUnrotated.z)
+//        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
+//
+//        let raBack = raRadiansBack * 180.0/Double.pi
+//        let decBack = decRadiansBack * 180.0/Double.pi
+//
+//        print("test get back ra = \(raBack)  dec = \(decBack)")
+//    }
+//
+//    func test2() {
+//        let qProjected = simd_double2(x:0.0,y:0.0)
+//        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
+//
+//        let qUnrotated = inverseRotationMatrix * qUnprojected
+//
+//        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+//        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
+//        let  decRadiansBack = asin(qUnrotated.z)
+//        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
+//
+//        let raBack = raRadiansBack * 180.0/Double.pi
+//        let decBack = decRadiansBack * 180.0/Double.pi
+//
+//        print("test2  ra = \(raBack)  dec = \(decBack)")
+//    }
     
 //    func raDecToXYZ(ra:Double,dec:Double) -> simd_double3? {
 //        let raRadians = ra * Double.pi/180.0
@@ -1102,7 +1122,7 @@ class SkyView: UIView {
         let X = cos(raRadians) * cos(decRadians)
         let Y = sin(raRadians) * cos(decRadians)
         let Z = sin(decRadians)
-        return mapXYZ(simd_double3(X,Y,Z))
+        return skyViewTransform.mapXYZ(simd_double3(X,Y,Z))
     }
 
     // map screen x,y back to x,y,z and then to ra,dec
@@ -1114,13 +1134,13 @@ class SkyView: UIView {
         let cx = (b.maxX + b.minX) / 2.0
         let cy = (b.maxY + b.minY) / 2.0
         
-        let x = Double(pScreen.x - cx)/scale
-        let y = Double(pScreen.y - cy)/scale
+        let x = Double(pScreen.x - cx)/skyViewTransform.scale
+        let y = Double(pScreen.y - cy)/skyViewTransform.scale
         
         // mapping back through the projection matrix.  The
         // the x- and z- values depend on the partiuclar projection matrix
         // then calculate y to make the length 1
-        let qUnrotated = inverseRotationMatrix * simd_double3(x, sqrt(1.0 - (x*x + y*y)), -y)
+        let qUnrotated = skyViewTransform.inverseRotationMatrix * simd_double3(x, sqrt(1.0 - (x*x + y*y)), -y)
        
         //next: use Astro's xyz to ra,dec
         var ra =  atan2(qUnrotated.y,qUnrotated.x) * 180.0/Double.pi
@@ -1154,20 +1174,20 @@ class SkyView: UIView {
             break
         case .changed:
             var deltaX = 90 * (translation.x - lastTranslation.x)/frame.width
-            deltaX = deltaX * 400.0/CGFloat(scaleForStarView)
+            deltaX = deltaX * 400.0/CGFloat(skyViewTransform.scaleForStarView)
             
-            var angle = raAngle + Double(deltaX)
+            var angle = skyViewTransform.raAngle + Double(deltaX)
             if(angle > 360.0) {
                 angle = angle - 360
             }
             if(angle  < 0) {
                 angle = angle + 360.0
             }
-            raAngle = angle
+            skyViewTransform.raAngle = angle
             
             var deltaY = 90 * (translation.y - lastTranslation.y)/frame.height
-            deltaY = deltaY * 400.0/CGFloat(scaleForStarView)
-            angle = decAngle + Double(deltaY)
+            deltaY = deltaY * 400.0/CGFloat(skyViewTransform.scaleForStarView)
+            angle = skyViewTransform.decAngle + Double(deltaY)
 
             // if the user pans past the North Pole or the South Pole, move
             // to the other side of the pole.
@@ -1187,7 +1207,7 @@ class SkyView: UIView {
 //                    raAngle = raAngle - 24.0
 //                }
 //            }
-            decAngle = angle
+            skyViewTransform.decAngle = angle
             lastTranslation = translation
             setNeedsDisplay()
             break

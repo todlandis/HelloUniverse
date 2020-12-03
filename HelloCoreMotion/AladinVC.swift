@@ -23,7 +23,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
     
     
     @IBOutlet weak var plusView: PlusView!
-    @IBOutlet weak var whoIsThatBehindTheScreen: UIView!
+    @IBOutlet weak var whoIsThatBehindTheScreen: SkyViewOverlay!
     
     @IBOutlet weak var searchCompleteLabel: UILabel!
     
@@ -36,8 +36,11 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
     @IBOutlet weak var fovLabel: UILabel!
     
     @IBOutlet weak var howToGetHelpLabel: UILabel!
-    
+        
     var aladin:Aladin? = nil
+    var aladinPixelWidth:Int? = nil
+    var aladinPixelHeight:Int? = nil
+    
     var appDelegate:AppDelegate? = nil
 
     let latLonFinder = LatLonFinder()
@@ -56,7 +59,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        Astro.test()
+//        Astro.test20()
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("ERROR no appDelegate in AladinVC")
@@ -65,7 +68,11 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
         
         self.appDelegate = appDelegate
 
+        whoIsThatBehindTheScreen.backgroundColor = UIColor.black
         whoIsThatBehindTheScreen.alpha = 1.0
+        whoIsThatBehindTheScreen.isUserInteractionEnabled = false
+        webView.alpha = 0.0
+        
         searchBar.delegate = self
 
         if appDelegate.targetIsFromUrl {
@@ -120,6 +127,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
                 }
             })
             updateLabels()
+            
         }
     }
     
@@ -130,8 +138,17 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
             return
         }
         showStarted = true
-        
-        UIView.animate(withDuration: 2, delay: 2, options: [], animations: {self.whoIsThatBehindTheScreen.alpha = 0.0}, completion: {_ in
+
+        UIView.animate(withDuration: 2, delay: 2, options: [], animations: {self.whoIsThatBehindTheScreen.backgroundColor = UIColor.clear;self.webView.alpha = 1.0}, completion: {_ in
+
+            // assuming that was enough of a delay for aladin to be
+            //   available...but look for a way for aladin to call
+            //   back when it is ready
+            self.aladin?.getSize(completionHandler: {
+                w,h,error in
+                self.aladinPixelWidth =  Int(w)
+                self.aladinPixelHeight = Int(h)
+            })
             self.updateLabels()
 
             UIView.animate(withDuration: 4, delay: 0, options: [], animations: {self.howToGetHelpLabel.alpha = 0.0}, completion: {_ in
@@ -165,30 +182,43 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
 //    }
 
     func updateLabels() {
+        func decimalDegreesToLabel(_ d:Double) -> String {
+            let (dd,mm,ss) = Convert.decimalDegreesToDMS(d)
+            if(dd != 0) {
+                return String(format:"%2.0f°",dd)  // rounds off
+            }
+            else if(mm > 0) {
+                return String(format:"%2.0f'",mm)
+            }
+            else {
+                return String(format:"%2.0f\"",ss)
+            }
+        }
+
         aladin?.getRaDec(completionHandler: {
             (ra,dec, error) in
+       //     print("getRaDec")
             if error == nil {
+                // transform goes here
+                self.whoIsThatBehindTheScreen.gotoRaDec(ra:ra,dec:dec)
                 let (h,m,s) = Convert.decimalDegreesToHMS(ra)
                 let (dd,mm,ss) = Convert.decimalDegreesToDMS(dec)
                 self.raDecLabel.text = String(format:"%2.0fh%2.0fm%2.0f %2.0f°%2.0f'%2.0f\"",h,m,s,dd,mm,ss)
+                
+                self.whoIsThatBehindTheScreen.matchAladin(ra:ra,dec:dec, aladin:self.aladin!)
+                self.whoIsThatBehindTheScreen.setNeedsDisplay()
             }
-        })
-        aladin?.getFov(completionHandler: {
-            (w, h, error) in
-            if error == nil {
-                let (dd,mm,ss) = Convert.decimalDegreesToDMS(w)
-                var s:String
-                if(dd != 0) {
-                    s = String(format:"%2.0f°",w)  // rounds off
+            self.aladin?.getFov(completionHandler: {
+                (w, h, error) in
+                if error == nil {
+                    let ws = decimalDegreesToLabel(w)
+                //    let hs = decimalDegreesToLabel(h)
+                    self.fovLabel.text = "\(ws)"
+                    
+                    
                 }
-                else if(mm > 0) {
-                    s = String(format:"%2.0f'",mm)
-                }
-                else {
-                    s = String(format:"%2.0f\"",ss)
-                }
-                self.fovLabel.text = s
-            }
+
+            })
         })
     }
     
@@ -205,7 +235,6 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
         return true
     }
     
-    //    var previousSurvey:String? = nil
     // as we leave set the sky map to match this ra,dec
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -240,56 +269,74 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
     }
     
     func searchBarSearchButtonClicked(_ sb:UISearchBar) {
+        func doSearch(_ text:String) {
+            aladin?.gotoObject(name: text, completionHandler: {
+                (ra,dec,error) in
+                self.searchCompleteLabel.alpha = 1.0
+                if let error = error {
+                    // dialog here
+                    // needs thought
+                    print(error.localizedDescription)
+                }
+                // there is a bug causing error to be nil all the time
+                self.updateLabels()
+            })
+        }
         sb.resignFirstResponder()
         
-        // extensions to Aladin Lite for first char ?, !, and :
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+
+        // extensions to Aladin Lite search strings
+        //    ?     help
+        //    !     point at zenith
+        //    :     macro
+        //    0-24  set survey
+        //    .     previous survey
         if let text = sb.text {
-            if text.hasPrefix("?")  {
+            let components = text.components(separatedBy: " ")
+            
+            let cmd = components[0]
+            switch(cmd) {
+            case "?":
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let helpVC = storyboard.instantiateViewController(identifier: "HelpScreen")
                 present(helpVC,animated: false,completion: nil)
-            }
-            else if text.hasPrefix("!") {
+                break
+            case "!":
                 gotoTheZenith()
-            }
-            else if text.hasPrefix(":") {
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                    return
+                break
+            case ".":
+                self.aladin?.setImageSurvey(survey: appDelegate.settings.previousSurvey)
+                let swap = appDelegate.settings.survey
+                appDelegate.settings.survey = appDelegate.settings.previousSurvey
+                appDelegate.settings.previousSurvey = swap
+                break
+            case "1","2","3","4","5","6","7","8","9",
+                 "10","11","12","13","14","15","16","17","18","19",
+                 "20","21","22","23","24":
+                if components.count > 1 {
+                    doSearch(text)
                 }
-                let macro = appDelegate.macro
-                
-                let start = text.index(text.startIndex, offsetBy: 1)
-    //            let end =   text.index(text.endIndex, offsetBy:0)
-                let range = start..<text.endIndex
-                let s = String(text[range]).trimmingCharacters(in: .whitespaces)
-                switch(s) {
-                case "c", "C":
-                    macro.copyUrlToClipboard()
-                    break
-                default:
-                    break
+                else if let k = Int(cmd) {
+                    switchAladinToSurvey(k-1)
                 }
-//                print(s)
-                
-            }
-            else {
-                aladin?.gotoObject(name: text, completionHandler: {
-                    (ra,dec,error) in
-                    self.searchCompleteLabel.alpha = 1.0
-                    if let error = error {
-                        // dialog here
-                        // needs thought
-                        print(error.localizedDescription)
-                    }
-                    else {
-                        self.updateLabels()
-                    }
-                })
-                
+                break
+            default:
+                if cmd.hasPrefix(":") {
+                    let macro = appDelegate.macro
+                    macro.process(text)
+                }
+                else {
+                    doSearch(text)
+                }
+                whoIsThatBehindTheScreen.setNeedsDisplay()
+                break
             }
         }
     }
-    
+
     func searchBarCancelButtonClicked(_ sb:UISearchBar) {
         sb.text = ""
         searchCompleteLabel.alpha = 0.0
@@ -356,6 +403,18 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
         }
         else {
             aladin?.gotoRaDec(ra: z.ra, dec: z.dec)
+        }
+    }
+    
+    func switchAladinToSurvey(_ k:Int) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let surveys = appDelegate.settings.surveys
+        if k >= 0 && k < surveys.count {
+            appDelegate.settings.survey = surveys[k].id
+            self.aladin?.setImageSurvey(survey: surveys[k].id)
         }
     }
 }
