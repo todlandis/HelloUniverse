@@ -17,32 +17,77 @@
 
 import UIKit
 
+class Setting {
+    enum SettingType {
+       case boolType
+    }
+    
+    var type:SettingType
+    var name:String
+    var isOn:Bool
+    
+    init(_ n:String,_ isOn:Bool) {
+        self.type = .boolType
+        self.name = n
+        self.isOn = isOn
+    }
+}
+
+
 class Settings {
-    var drawConstellationLines = true
-    var drawConstellationNames = true
+    var list:[Setting] = []
+    var drawGrid = Setting("Draw Gridlines", false)
+    var drawConstellationLines = Setting("Draw Constellation Lines", true)
+    var drawConstellationNames = Setting("Draw Constellation Names", true)
     
-    var drawGrid =     false
-    var drawFOV =      false         
-    var drawBayer =    false
-    var drawCommonNames =  false
+    var drawCommonNames =  Setting("Star Names", false)
+    var drawMagnitude =    Setting("Star Magnitudes", false)
+    var drawBayer =        Setting("Greek Letters", false)
+    var drawMessier =      Setting("Messier Objects", false)
+    var drawSharpless =    Setting("Starpless Objects", false)
+    var drawNGC =          Setting("NGC Objects",true)
     
-    var drawMagnitude =       false    // ui does not surface this yet
+    var drawFOV =          Setting("Aladin FOV",true)
+    var drawAladin =       Setting("Aladin Frame", true)
+    var drawCenterPlus =    Setting("Plus Sign", true)
+
+    init() {
+        list.append(drawGrid)
+        list.append(drawConstellationLines)
+        list.append(drawConstellationNames)
+
+        list.append(drawCommonNames)
+        list.append(drawMagnitude)
+        list.append(drawBayer)
+        list.append(drawMessier)
+        list.append(drawNGC)
+        
+        list.append(drawFOV)
+        list.append(drawAladin)
+        list.append(drawCenterPlus)
+    }
+
+   // var drawGrid =     false
+
+    var decimalFormat = false
+    
+    
+    
     var drawSpectralType =    false    // ui does not surface this yet
     var drawParsecs =         false    // ui does not surface this yet
 
-    var drawMessier =      true
 
     var drawBullsEye =     false       // ui does not surface this yet
-    var drawAladin =       true
-    var drawPlusSigns =    false
     
-    var messierLabelSize =       CGFloat(14.0)
+    var messierLabelSize =       CGFloat(18.0)
     var constellationLabelSize = CGFloat(18.0)
     var starNameLabelSize =      CGFloat(18.0)
     
     var starColor =     UIColor.white
 
     var messierColor = TangoColors.TANGOORANGE
+    
+    var currentSurvey:Int = 0
     
     var previousSurvey:String = "P/DSS2/color"
     var survey:String = "P/DSS2/color" {
@@ -56,7 +101,7 @@ class Settings {
     let surveys = [
 
         (id:"P/DSS2/color",desc:"1:Digitized Sky Survey (Color)",type:"Visual", url:"https://archive.eso.org/dss/dss"),
-        
+        (id:"P/HST/SDSSg",desc:"Hubble",type:"",url:""),
         (id:"P/2MASS/color",desc:"2:Two Micron All Sky Survey", type:"Near Infrared",url:"https://www.sdss.org"),
         //        The Two Micron All Sky Survey - J-H-K bands (2MASS color)
         //        2MASS color J (1.23um), H (1.66um), K (2.16um)
@@ -114,7 +159,7 @@ class Settings {
         //        em_max               = 6.58e-7
         //
         
-        (id:"P/DECaLS/DR3/color",desc:"17:Dark Energy Survey DR3", type:"", url:""),
+        (id:"P/DECaLS/DR3/color",desc:"17:Dark Energy Survey DECaLS/DR3", type:"", url:""),
         // northern hemisphere in three optical bands (g,r,z) and four infrared bands
         
         // works for Sgr A

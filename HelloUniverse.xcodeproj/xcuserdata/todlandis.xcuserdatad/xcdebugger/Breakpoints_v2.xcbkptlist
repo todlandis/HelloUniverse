@@ -192,7 +192,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "95"
             endingLineNumber = "95"
-            landmarkName = "draw(_:)"
+            landmarkName = "setGestures(appDelegate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -206,8 +206,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1162"
-            endingLineNumber = "1162"
+            startingLineNumber = "1156"
+            endingLineNumber = "1156"
             landmarkName = "pan(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -224,8 +224,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
             endingLineNumber = "80"
-            landmarkName = "setGestures(appDelegate:)"
-            landmarkType = "7">
+            landmarkName = "SkyView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -270,10 +270,10 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1154"
-            endingLineNumber = "1154"
-            landmarkName = "pan(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1148"
+            endingLineNumber = "1148"
+            landmarkName = "SkyView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -286,9 +286,9 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1149"
-            endingLineNumber = "1149"
-            landmarkName = "pan(_:)"
+            startingLineNumber = "1143"
+            endingLineNumber = "1143"
+            landmarkName = "unMap(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -368,8 +368,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "501"
             endingLineNumber = "501"
-            landmarkName = "drawBullsEyeF()"
-            landmarkType = "7">
+            landmarkName = "SkyView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -416,8 +416,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "79"
             endingLineNumber = "79"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "viewWillDisappear(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -624,7 +624,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "706"
             endingLineNumber = "706"
-            landmarkName = "labelStar(_:)"
+            landmarkName = "labelStars(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -638,9 +638,9 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "985"
-            endingLineNumber = "985"
-            landmarkName = "plotLabel(_:_:_:_:_:color:)"
+            startingLineNumber = "981"
+            endingLineNumber = "981"
+            landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -656,7 +656,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "878"
             endingLineNumber = "878"
-            landmarkName = "magnitudeToSize(_:zoomed:)"
+            landmarkName = "boxStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -784,8 +784,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "182"
             endingLineNumber = "182"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "SettingsVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -800,8 +800,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "178"
             endingLineNumber = "178"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "pickerView(_:attributedTitleForRow:forComponent:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -816,8 +816,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "181"
             endingLineNumber = "181"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "pickerView(_:attributedTitleForRow:forComponent:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -831,9 +831,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            endingLineNumber = "190">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -848,8 +846,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "168"
             endingLineNumber = "168"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "pickerView(_:numberOfRowsInComponent:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -896,8 +894,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
             endingLineNumber = "91"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "clcikConstellatoinLines(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1052,8 +1050,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "171"
             endingLineNumber = "171"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "SettingsVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1068,8 +1066,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"
             endingLineNumber = "77"
-            landmarkName = "updateMessierRaDec()"
-            landmarkType = "7">
+            landmarkName = "BrightStarCatalog"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1084,8 +1082,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "74"
             endingLineNumber = "74"
-            landmarkName = "updateMessierRaDec()"
-            landmarkType = "7">
+            landmarkName = "BrightStarCatalog"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1116,7 +1114,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "436"
             endingLineNumber = "436"
-            landmarkName = "drawMessierObjects()"
+            landmarkName = "drawCenterPlus()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1246,38 +1244,6 @@
             endingLineNumber = "81"
             landmarkName = "processURL(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "80D13BA4-B596-4721-9B88-DF54BD47C9AE - 37ab0202b755d627"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HelloUniverse.SceneDelegate.processURL(__C.UIOpenURLContext) -&gt; ()"
-                  moduleName = "HelloUniverse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/todlandis/src/HelloUniverse_clone/HelloCoreMotion/SceneDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "82"
-                  endingLineNumber = "82"
-                  offsetFromSymbolStart = "3332">
-               </Location>
-               <Location
-                  uuid = "80D13BA4-B596-4721-9B88-DF54BD47C9AE - 8536d8e2f7721d04"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Double, Swift.Double, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in HelloUniverse.SceneDelegate.processURL(__C.UIOpenURLContext) -&gt; ()"
-                  moduleName = "HelloUniverse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/todlandis/src/HelloUniverse_clone/HelloCoreMotion/SceneDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "84"
-                  endingLineNumber = "84"
-                  offsetFromSymbolStart = "216">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1372,8 +1338,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
             endingLineNumber = "159"
-            landmarkName = "AladinVC"
-            landmarkType = "3">
+            landmarkName = "tapped(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1388,8 +1354,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "230"
             endingLineNumber = "230"
-            landmarkName = "getConstellationLines()"
-            landmarkType = "7">
+            landmarkName = "BrightStarCatalog"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1556,7 +1522,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "68C12823-DA3B-4606-AF88-DAFED8D211BA"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "skyview/SkyView.swift"
@@ -1572,7 +1538,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "C5A6825C-9ED8-4E22-AD57-40ACFDD45602"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "skyview/SkyView.swift"

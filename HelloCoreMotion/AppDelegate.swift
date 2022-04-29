@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var aladinVC:AladinVC? = nil
     var skyViewVC:SkyViewVC? = nil
-    var settingsVC:SettingsVC? = nil
+ //   var settingsVC:SettingsVC? = nil
     
     
 //    var heartBeat:Heartbeat? = nil

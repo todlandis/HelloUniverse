@@ -35,9 +35,9 @@
 		D38EB2CB24D8DFF100CB55C3 /* Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EB2CA24D8DFF100CB55C3 /* Convert.swift */; };
 		D38EB2CD24DA328400CB55C3 /* Astro.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EB2CC24DA328400CB55C3 /* Astro.swift */; };
 		D3940EEE24E925C600A69907 /* Constellations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EED24E925C600A69907 /* Constellations.swift */; };
-		D3940EF124EA41FC00A69907 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EF024EA41FC00A69907 /* SettingsVC.swift */; };
 		D3940EF324EB29BC00A69907 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3940EF224EB29BC00A69907 /* Settings.swift */; };
 		D3A45479253B88BD00DA4904 /* DeviceAttitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A45478253B88BD00DA4904 /* DeviceAttitude.swift */; };
+		D3E6BFCD281BAA7600AEF0DF /* DataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E6BFCC281BAA7600AEF0DF /* DataVC.swift */; };
 		D3E88E8A250080E9009D0EBF /* InfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E88E89250080E9009D0EBF /* InfoVC.swift */; };
 		D3E88E8C2500ABD6009D0EBF /* m54.png in Resources */ = {isa = PBXBuildFile; fileRef = D3E88E8B2500ABD6009D0EBF /* m54.png */; };
 		D3ECC8D3251FDCB6006A80FE /* PlusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ECC8D2251FDCB6006A80FE /* PlusView.swift */; };
@@ -76,9 +76,9 @@
 		D38EB2CC24DA328400CB55C3 /* Astro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Astro.swift; sourceTree = "<group>"; };
 		D3940EED24E925C600A69907 /* Constellations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constellations.swift; sourceTree = "<group>"; };
 		D3940EEF24E9C0F200A69907 /* HelloCoreMotion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HelloCoreMotion.entitlements; sourceTree = "<group>"; };
-		D3940EF024EA41FC00A69907 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		D3940EF224EB29BC00A69907 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D3A45478253B88BD00DA4904 /* DeviceAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAttitude.swift; sourceTree = "<group>"; };
+		D3E6BFCC281BAA7600AEF0DF /* DataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataVC.swift; sourceTree = "<group>"; };
 		D3E88E89250080E9009D0EBF /* InfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVC.swift; sourceTree = "<group>"; };
 		D3E88E8B2500ABD6009D0EBF /* m54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = m54.png; sourceTree = "<group>"; };
 		D3ECC8D2251FDCB6006A80FE /* PlusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusView.swift; sourceTree = "<group>"; };
@@ -135,12 +135,12 @@
 				D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */,
 				D30744152579A78200E0C5D9 /* SkyViewTransform.swift */,
 				D35D7A5F24E3BCD5001F5E66 /* SkyViewVC.swift */,
-				D3940EF024EA41FC00A69907 /* SettingsVC.swift */,
 				D363158E253FB05D000E9FBC /* HelpVC.swift */,
 				D3E88E89250080E9009D0EBF /* InfoVC.swift */,
 				D31E5D1A24D3B87D0013B254 /* Assets.xcassets */,
 				D31E5D1C24D3B87D0013B254 /* LaunchScreen.storyboard */,
 				D31E5D1F24D3B87D0013B254 /* Info.plist */,
+				D3E6BFCC281BAA7600AEF0DF /* DataVC.swift */,
 			);
 			path = HelloCoreMotion;
 			sourceTree = "<group>";
@@ -245,7 +245,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3940EF124EA41FC00A69907 /* SettingsVC.swift in Sources */,
 				D38EB2CB24D8DFF100CB55C3 /* Convert.swift in Sources */,
 				D349222824E36745007560B5 /* Aladin.swift in Sources */,
 				D3E88E8A250080E9009D0EBF /* InfoVC.swift in Sources */,
@@ -259,6 +258,7 @@
 				D35D7A6024E3BCD5001F5E66 /* SkyViewVC.swift in Sources */,
 				D38EB2CD24DA328400CB55C3 /* Astro.swift in Sources */,
 				D30744192579A78200E0C5D9 /* Annotations.swift in Sources */,
+				D3E6BFCD281BAA7600AEF0DF /* DataVC.swift in Sources */,
 				D35D7A5C24E3B852001F5E66 /* TangoColors.swift in Sources */,
 				D35D7A5624E3B2E4001F5E66 /* SqliteDatabase.swift in Sources */,
 				D35D7A5224E3A6CF001F5E66 /* Matrix.swift in Sources */,

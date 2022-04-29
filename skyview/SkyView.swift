@@ -220,11 +220,11 @@ class SkyView: UIView {
      //   print("scale = \(scale)")
         skyViewTransform.translationVector = simd_double3(0,0,0)
                         
-        if settings.drawGrid { drawGridLinesF() }
+        if settings.drawGrid.isOn { drawGridLinesF() }
         
         drawStars()
         
-        if settings.drawPlusSigns {
+        if settings.drawCenterPlus.isOn {
             drawCenterPlus()
         }
 
@@ -232,19 +232,19 @@ class SkyView: UIView {
         // annotations
         drawPlusPoints()
         
-        if(settings.drawMessier) { drawMessierObjects() }
+        if(settings.drawMessier.isOn) { drawMessierObjects() }
         
 //        drawCirclePoints()
 //        drawBoxPoints()
         drawLabels()
 
-        if(settings.drawFOV) { drawFieldOfView()}
+        if(settings.drawFOV.isOn) { drawFieldOfView()}
 
-        if(settings.drawAladin) { drawAladinCorners() }
+        if(settings.drawAladin.isOn) { drawAladinCorners() }
         if(settings.drawBullsEye) { drawBullsEyeF() }
 
-        if(settings.drawConstellationLines) { drawConstellationLinesF() }
-        if(settings.drawConstellationNames) { drawConstellationNamesF() }
+        if(settings.drawConstellationLines.isOn) { drawConstellationLinesF() }
+        if(settings.drawConstellationNames.isOn) { drawConstellationNamesF() }
         
 //        if(drawSpecialObjectsList) {
 //            drawSpecialObjects()
@@ -946,8 +946,8 @@ class SkyView: UIView {
 //        print(scale)
         var label:String = ""
         let ZOOMED_ENOUGH = 5000.0
-        if(settings.drawCommonNames) {
-            if skyViewTransform.scale > ZOOMED_ENOUGH {
+        if(settings.drawCommonNames.isOn) {
+//            if skyViewTransform.scale > ZOOMED_ENOUGH {
                 // every bright star gets at least HR
                 if star.commonName.count > 0 {
                     label = star.commonName
@@ -959,10 +959,10 @@ class SkyView: UIView {
             else if (g == "α" || skyViewTransform.scale > 1000.0) {
                 label = star.commonName
             }
-        }
+//        }
         
-        if settings.drawBayer {
-            if settings.drawCommonNames {
+        if settings.drawBayer.isOn {
+            if settings.drawCommonNames.isOn {
                 label = g.appending(" ").appending(label)
             }
             else {
@@ -970,22 +970,16 @@ class SkyView: UIView {
             }
         }
         
-        if settings.drawMagnitude {
-            if skyViewTransform.scale > ZOOMED_ENOUGH {
-                label = label.appending(" ").appending(String(format:"%.1f",star.magnitude))
-            }
+        if settings.drawMagnitude.isOn {
+            label = label.appending(" ").appending(String(format:"%.1f",star.magnitude))
         }
         
         if settings.drawSpectralType {
-            if skyViewTransform.scale > ZOOMED_ENOUGH {
-                label = label.appending(" ").appending(star.spectralType)
-            }
+            label = label.appending(" ").appending(star.spectralType)
         }
         
         if settings.drawParsecs {
-            if skyViewTransform.scale > ZOOMED_ENOUGH {
-                label = label.appending(" ").appending(String(format:"%.1f pc",star.parsecs))
-            }
+            label = label.appending(" ").appending(String(format:"%.1f pc",star.parsecs))
         }
 
         if label.count > 0 {

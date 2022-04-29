@@ -109,7 +109,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
         super.viewWillAppear(animated)
 
         if let settings =  self.appDelegate?.settings {
-            self.plusView.alpha = settings.drawPlusSigns ? 1.0 : 0.0
+//            self.plusView.alpha = settings.drawPlusSigns.isOn ? 1.0 : 0.0
             if !(self.aladin?.getImageSurvey() == settings.survey) {
                 self.aladin?.setImageSurvey(survey: settings.survey)
             }
