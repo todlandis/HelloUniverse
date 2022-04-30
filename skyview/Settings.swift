@@ -32,24 +32,26 @@ class Setting {
         self.isOn = isOn
     }
 }
-
+ 
 
 class Settings {
     var list:[Setting] = []
     var drawGrid = Setting("Draw Gridlines", false)
-    var drawConstellationLines = Setting("Draw Constellation Lines", true)
-    var drawConstellationNames = Setting("Draw Constellation Names", true)
+    var drawConstellationLines = Setting("Constellation Lines", true)
+    var drawConstellationNames = Setting("Constellation Names", true)
     
     var drawCommonNames =  Setting("Star Names", false)
+    var drawHRNames =      Setting("Star HR Names", false)
     var drawMagnitude =    Setting("Star Magnitudes", false)
-    var drawBayer =        Setting("Greek Letters", false)
+    var drawBayer =        Setting("Star Greek Letters", false)
+ 
     var drawMessier =      Setting("Messier Objects", false)
-    var drawSharpless =    Setting("Starpless Objects", false)
+    var drawSharpless =    Setting("Sharpless Objects", false)
     var drawNGC =          Setting("NGC Objects",true)
     
-    var drawFOV =          Setting("Aladin FOV",true)
-    var drawAladin =       Setting("Aladin Frame", true)
-    var drawCenterPlus =    Setting("Plus Sign", true)
+    var drawFOV =           Setting("Telescope FOV",false)  // not in UI
+    var drawAladin =        Setting("Aladin Frame", true)
+    var drawCenterPlus =    Setting("Plus Sign", false)
 
     init() {
         list.append(drawGrid)
@@ -57,12 +59,13 @@ class Settings {
         list.append(drawConstellationNames)
 
         list.append(drawCommonNames)
+        list.append(drawHRNames)
         list.append(drawMagnitude)
         list.append(drawBayer)
         list.append(drawMessier)
         list.append(drawNGC)
         
-        list.append(drawFOV)
+       //  list.append(drawFOV)
         list.append(drawAladin)
         list.append(drawCenterPlus)
     }
@@ -81,7 +84,7 @@ class Settings {
     
     var messierLabelSize =       CGFloat(18.0)
     var constellationLabelSize = CGFloat(18.0)
-    var starNameLabelSize =      CGFloat(18.0)
+    var starNameLabelSize =      CGFloat(14.0)
     
     var starColor =     UIColor.white
 

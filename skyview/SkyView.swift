@@ -923,7 +923,7 @@ class SkyView: UIView {
         }
 
         // pre-culling
-        if let w = Astro.raDecToXYZ(ra: skyViewTransform.raAngle, dec: skyViewTransform.decAngle) {    // do this once per draw
+        if let w = Astro.raDecToXYZ(ra: skyViewTransform.raAngle, dec: skyViewTransform.decAngle) {    //TODO do this once per draw
             let v = simd_double3(star.xs,star.ys,star.zs)      // save this
             let dotted = dot(v,w)                  // cosine of angle between v and w
             if dotted < 0 {
@@ -942,24 +942,18 @@ class SkyView: UIView {
 
         let g = greekToString(star.greek)
         
-        // scale determines what is drawn for a star label
-//        print(scale)
         var label:String = ""
-        let ZOOMED_ENOUGH = 5000.0
-        if(settings.drawCommonNames.isOn) {
-//            if skyViewTransform.scale > ZOOMED_ENOUGH {
-                // every bright star gets at least HR
-                if star.commonName.count > 0 {
-                    label = star.commonName
-                }
-                else {
-                    label = String(format:"HR %d",star.hr)
+        
+        let ZOOMED_ENOUGH = 2000.0
+
+        if(settings.drawCommonNames.isOn && g == "α" || g == "β" ) {
+            if star.commonName.count > 0 {
+                label = star.commonName.uppercased()
+                if settings.drawHRNames.isOn {
+                    label = label.appending(" ")
                 }
             }
-            else if (g == "α" || skyViewTransform.scale > 1000.0) {
-                label = star.commonName
-            }
-//        }
+        }
         
         if settings.drawBayer.isOn {
             if settings.drawCommonNames.isOn {
@@ -969,21 +963,30 @@ class SkyView: UIView {
                 label = g
             }
         }
+
+        if settings.drawHRNames.isOn && skyViewTransform.scale > ZOOMED_ENOUGH {
+            label = label.appending(String(format:"HR %d",star.hr))
+        }
+
         
-        if settings.drawMagnitude.isOn {
+        if settings.drawMagnitude.isOn && skyViewTransform.scale > ZOOMED_ENOUGH {
             label = label.appending(" ").appending(String(format:"%.1f",star.magnitude))
         }
         
-        if settings.drawSpectralType {
+        if settings.drawSpectralType && skyViewTransform.scale > ZOOMED_ENOUGH {
             label = label.appending(" ").appending(star.spectralType)
         }
         
-        if settings.drawParsecs {
+        if settings.drawParsecs && skyViewTransform.scale > ZOOMED_ENOUGH {
             label = label.appending(" ").appending(String(format:"%.1f pc",star.parsecs))
         }
 
         if label.count > 0 {
-            plotLabel(X,Y,Z,label,settings.starNameLabelSize)
+            var size = settings.starNameLabelSize
+            if settings.drawBayer.isOn && !settings.drawCommonNames.isOn {
+                size = settings.constellationLabelSize      // this is bigger
+            }
+            plotLabel(X,Y,Z,label,size)
         }
 
     }

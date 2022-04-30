@@ -206,8 +206,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1156"
-            endingLineNumber = "1156"
+            startingLineNumber = "1159"
+            endingLineNumber = "1159"
             landmarkName = "pan(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -270,8 +270,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1148"
-            endingLineNumber = "1148"
+            startingLineNumber = "1151"
+            endingLineNumber = "1151"
             landmarkName = "SkyView"
             landmarkType = "3">
          </BreakpointContent>
@@ -286,8 +286,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1143"
-            endingLineNumber = "1143"
+            startingLineNumber = "1146"
+            endingLineNumber = "1146"
             landmarkName = "unMap(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -638,8 +638,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "981"
-            endingLineNumber = "981"
+            startingLineNumber = "980"
+            endingLineNumber = "980"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1192,8 +1192,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "953"
-            endingLineNumber = "953"
+            startingLineNumber = "951"
+            endingLineNumber = "951"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
