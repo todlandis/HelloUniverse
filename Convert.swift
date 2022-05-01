@@ -1,20 +1,9 @@
 //
 //  Convert.swift
-//  Copyright © 2020 Tod Landis. All rights reserved.
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//  Copyright © 2020,2021,2022 Tod Landis. All rights reserved.
 //
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-//
-// 2.0
+// horizons,NGCPlot
+// 5.0
 
 import Foundation
 
@@ -29,7 +18,7 @@ class Convert {
         return icrsToRADec(string.components(separatedBy: .whitespaces))
     }
     
-    class func raDecToIcrs(ra:Double, dec:Double, underscored:Bool = true) -> String {
+    class func raDecToIcrs(ra:Double, dec:Double, underscored:Bool = false) -> String {
         let (h,m,s) = Convert.decimalDegreesToHMS(ra)
       //  print("\(ra) -> \(h) \(m) \(s)")
         let (dd,mm,ss) = Convert.decimalDegreesToDMS(dec)
@@ -87,21 +76,46 @@ class Convert {
         return (ra,dec)
     }
     
-    class func test2() {  // not working!
-        if let degrees = Convert.hmsToDecimalDegrees("23 24 48.0") {
-            print("degrees = \(degrees)")
-            let (h,m,s) = Convert.decimalDegreesToHMS(degrees)
-            print("\(h) \(m) \(s)")
+    class func hmsToDecimalHours(h:Double,m:Double,s:Double) -> Double {
+        if(h < 0.0) {
+            return h - m/60.0 - s/3600.0
+        }
+        else {
+            return h + m/60.0 + s/3600.0
         }
     }
     
-    class func test() {
-        if let degrees = Convert.dmsToDecimalDegrees("23 24 48.0") {
-            let (h,m,s) = Convert.decimalDegreesToDMS(degrees)
-            print("\(h) \(m) \(s)")
+    class func decimalHoursToHMS(_ hours:Double) -> (h:Double,m:Double,s:Double){
+        let negative = hours < 0
+        let hoursDecimal = abs(hours)
+        
+        var h = floor(hoursDecimal)
+        let m = floor((hoursDecimal - h) * 60.0 )
+        let s = ((hoursDecimal - h) * 3600) - (m * 60.0)
+        if negative {
+            h = -h
+        }
+        return (h,m,s)
+    }
+    
+    class func decimalDegreesToDecimalHours(_ val:Double) -> Double {
+        return val / 15.0
+    }
+    
+    class func decimalHoursToDegrees(_ val:Double) -> Double {
+        return val * 15.0
+    }
+    
+    class func hmsToDecimalHours(_ s:String,separator:String = " ") -> Double {
+        let (h,m,s) = Convert.stringToThreeValues(s,separator: separator)
+        if h < 0 {
+            return h - m/60.0 - s/3600.0
+        }
+        else {
+            return h + m/60.0 + s/3600.0
         }
     }
-
+    
     class func decimalDegreesToHMS(_ valIn:Double) -> (h:Double, m:Double, s:Double) {
         let val = valIn / 15.0
         let h = floor(val)
@@ -112,23 +126,36 @@ class Convert {
     }
     
     
-    
-    //23 24 48.0
-    class func hmsToDecimalDegrees(_ s:String) -> Double? {
-        let fields = s.trimmingCharacters(in: .whitespaces).replacingOccurrences(of:"  ", with:" ").replacingOccurrences(of: "−", with: "-").components(separatedBy: " ")
-        if fields.count < 3 {
-            return nil
-        }
+    // "23 24 48.0"
+    class func stringToThreeValues(_ s:String,separator:String=" ") -> (h:Double,m:Double,s:Double){
+        let fields = s.trimmingCharacters(in: .whitespaces).replacingOccurrences(of:"  ", with:" ").components(separatedBy: separator)
 
-        if let h = Double(fields[0]),
-        let m = Double(fields[1]),
-            let s = Double(fields[2]) {
-            let val = (h + m/60.0 + s/3600.0)  // decimal hours
-            return  val * 15.0                 //  360.0/24.0
+        var h = 0.0
+        var m = 0.0
+        var s = 0.0
+        if fields.count > 0 {
+            if let hh = Double(fields[0]) {
+                h = hh
+            }
         }
-        else {
-            return nil
+        if fields.count > 1 {
+            if let mm = Double(fields[1]) {
+                m = mm
+            }
         }
+        if fields.count > 2 {
+            if let ss = Double(fields[2]) {
+                s = ss
+            }
+        }
+        return (h,m,s)
+    }
+    
+    // "23 24 48.0"
+    class func hmsToDecimalDegrees(_ hmsString:String,separator:String = " ") -> Double? {
+        let (h,m,s) = stringToThreeValues(hmsString,separator:separator)
+        let val = hmsToDecimalHours(h: h, m: m, s: s)
+        return  val * 15.0
     }
     
     class func decimalDegreesToDMS(_ valIn:Double) -> (d:Double,m:Double,s:Double) {
@@ -149,26 +176,63 @@ class Convert {
     }
 
     //  +61 35 36
-    class func dmsToDecimalDegrees(_ s:String) -> Double? {
-        var fields = s.trimmingCharacters(in: .whitespaces).replacingOccurrences(of:"  ", with:" ").replacingOccurrences(of: "−", with: "-").components(separatedBy: " ")
-        if fields.count < 3 {
-            return nil
-        }
-        if fields[0] == "−00" {
-            fields[0] = "0"
-        }
+    class func dmsToDecimalDegrees(_ dmsString:String,separator:String = " ") -> Double? {
+        var fields = dmsString.trimmingCharacters(in: .whitespaces).replacingOccurrences(of:"  ", with:" ").replacingOccurrences(of: "−", with: "-").components(separatedBy: separator)
 
-        if let d = Double(fields[0]),
-            let m = Double(fields[1]),
-            let s = Double(fields[2]) {
-            if(d < 0) {
-                return (d - m/60.0 - s/3600.0)
-            } else {
-                return (d + m/60.0 + s/3600.0)
+        var d = 0.0
+        var m = 0.0
+        var s = 0.0
+        if fields.count > 0 {
+            if fields[0] == "−00" {
+                fields[0] = "0"
+            }
+            if let dd = Double(fields[0]) {
+                d = dd
             }
         }
+        if fields.count > 1 {
+            if let mm = Double(fields[1]) {
+                m = mm
+            }
+        }
+        if fields.count > 2 {
+            if let ss = Double(fields[2]) {
+                s = ss
+            }
+        }
+        if(d < 0) {
+            return (d - m/60.0 - s/3600.0)
+        }
         else {
-            return nil
+            return (d + m/60.0 + s/3600.0)
+        }
+    }
+    
+    class func dmsToDecimalDegrees(d:Double, m:Double, s:Double) -> Double {
+        if(d < 0) {
+            return (d - m/60.0 - s/3600.0)
+        }
+        else {
+            return (d + m/60.0 + s/3600.0)
+        }
+    }
+    
+    // p. 15
+    class func test() {
+        if let degrees = Convert.dmsToDecimalDegrees("23 24 48.0") {
+            let (h,m,s) = Convert.decimalDegreesToDMS(degrees)
+            print("\(h) \(m) \(s)")
+        }
+    }
+    class func test1() {
+        print(Convert.decimalHoursToHMS(18.524167))
+        // (h: 18.0, m: 31.0, s: 27.001199999994697) matches the books
+    }
+    class func test2() {
+        if let degrees = Convert.hmsToDecimalDegrees("23 24 48.0") {
+            print("degrees = \(degrees)")
+            let (h,m,s) = Convert.decimalDegreesToHMS(degrees)
+            print("\(h) \(m) \(s)")
         }
     }
 }

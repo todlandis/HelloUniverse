@@ -228,12 +228,20 @@ class SkyView: UIView {
             drawCenterPlus()
         }
 
-
         // annotations
         drawPlusPoints()
         
         if(settings.drawMessier.isOn) { drawMessierObjects() }
-        
+        if(settings.drawGalaxies.isOn) { drawGalaxies() }
+        if(settings.drawSNR.isOn) { drawSNRs() }
+        if(settings.drawGlobular.isOn) { drawGlobulars() }
+        if(settings.drawOpenClusters.isOn) { drawOpenClusters() }
+        if(settings.drawNebulas.isOn) { drawNebulas() }
+        if(settings.drawHIIRegions.isOn) { drawHIIRegions() }
+        if(settings.drawDarkNebulas.isOn) { drawNebulas() }
+        if(settings.drawNovas.isOn) { drawNovas() }
+        if(settings.drawBinaries.isOn) { drawBinaries() }
+
 //        drawCirclePoints()
 //        drawBoxPoints()
         drawLabels()
@@ -441,13 +449,75 @@ class SkyView: UIView {
         let catalog = BrightStarCatalog.shared
         _ = catalog.open()
         let mess = catalog.getMessierObjects()
-        
         for m in mess {
-            plotMessier(label:m.name, x:m.xs,y:m.ys,z:m.zs)
+            plotObject(label:m.name, x:m.xs,y:m.ys,z:m.zs)
         }
         catalog.close()
     }
+
+    func drawGalaxies() {
+        let list = OpenNGCCatalog.shared.getGalaxies()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
+    func drawSNRs() {
+        let list = OpenNGCCatalog.shared.getSuperNovaRemnants()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
     
+    func drawDarkNebulas() {
+        let list = OpenNGCCatalog.shared.getDarkNebulas()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+    
+    func drawGlobulars() {
+        let list = OpenNGCCatalog.shared.getGlobularClusters()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
+    func drawOpenClusters() {
+        let list = OpenNGCCatalog.shared.getOpenClusters()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
+    func drawNebulas() {
+        let list = OpenNGCCatalog.shared.getNebulas()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+    
+    func drawHIIRegions() {
+        let list = OpenNGCCatalog.shared.getHIIRegions()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
+    func drawNovas() {
+        let list = OpenNGCCatalog.shared.getNovas()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
+    func drawBinaries() {
+        let list = OpenNGCCatalog.shared.getBinaries()
+        for ngc in list {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+
     func boxRAandDEC(ra:Double,dec:Double) {
         boxPoints.append((ra,dec))
     }
@@ -832,7 +902,7 @@ class SkyView: UIView {
         context.strokePath()
     }
 
-    func plotMessier(label:String,x:Double,y:Double,z:Double) {
+    func plotObject(label:String,x:Double,y:Double,z:Double) {
         // user can zoom in to see the labels
         if skyViewTransform.scale > 750.0 {
             plotLabel(x,y,z, label, font:messierFont!, color:settings!.messierColor)

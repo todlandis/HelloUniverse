@@ -36,7 +36,8 @@ class Setting {
 
 class Settings {
     var list:[Setting] = []
-    var drawGrid = Setting("Draw Gridlines", false)
+    
+    var drawGrid =               Setting("Draw Gridlines", false)
     var drawConstellationLines = Setting("Constellation Lines", true)
     var drawConstellationNames = Setting("Constellation Names", true)
     
@@ -46,12 +47,21 @@ class Settings {
     var drawBayer =        Setting("Star Greek Letters", false)
  
     var drawMessier =      Setting("Messier Objects", false)
-    var drawSharpless =    Setting("Sharpless Objects", false)
-    var drawNGC =          Setting("NGC Objects",true)
+    var drawSharpless =    Setting("Sharpless Objects", false) // not in UI
     
-    var drawFOV =           Setting("Telescope FOV",false)  // not in UI
-    var drawAladin =        Setting("Aladin Frame", true)
-    var drawCenterPlus =    Setting("Plus Sign", false)
+    var drawGalaxies =     Setting("NGC Galaxies",true)
+    var drawSNR =          Setting("NGC Super Nova Remnants",false)
+    var drawGlobular =     Setting("NGC Globular Clusters",false)
+    var drawOpenClusters = Setting("NGC Open Clusters",false)
+    var drawNebulas =      Setting("NGC Nebulas",false)
+    var drawHIIRegions =   Setting("NGC HII Regions",false)
+    var drawDarkNebulas =  Setting("NGC Dark Nebulas",false)
+    var drawNovas =        Setting("NGC Novas",false)
+    var drawBinaries =     Setting("NGC Binaries",false)
+
+    var drawFOV =          Setting("Telescope FOV",false)  // not in UI
+    var drawAladin =       Setting("Aladin Frame", true)
+    var drawCenterPlus =   Setting("CenterPlus Sign", false)
 
     init() {
         list.append(drawGrid)
@@ -63,8 +73,17 @@ class Settings {
         list.append(drawMagnitude)
         list.append(drawBayer)
         list.append(drawMessier)
-        list.append(drawNGC)
         
+        list.append(drawGalaxies)
+        list.append(drawSNR)
+        list.append(drawGlobular)
+        list.append(drawOpenClusters)
+        list.append(drawNebulas)
+        list.append(drawHIIRegions)
+        list.append(drawDarkNebulas)
+        list.append(drawNovas)
+        list.append(drawBinaries)
+
        //  list.append(drawFOV)
         list.append(drawAladin)
         list.append(drawCenterPlus)
