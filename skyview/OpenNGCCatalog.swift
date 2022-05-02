@@ -205,7 +205,7 @@ class OpenNGCCatalog:ObservableObject {
         }
         var statement: OpaquePointer? = nil
         
-        if (sqlite3_prepare_v2(database, "SELECT name,x,y,z,type,hubble,majAx FROM OpenNGC  ".appending(sql), -1, &statement, nil) != SQLITE_OK) {
+        if (sqlite3_prepare_v2(database, "SELECT name,x,y,z,type,hubble,majAx,m FROM OpenNGC  ".appending(sql), -1, &statement, nil) != SQLITE_OK) {
             print("ERROR preparing \"\(sql)\"")
             sqlError();
         }
@@ -221,7 +221,8 @@ class OpenNGCCatalog:ObservableObject {
                     let type = stringFrom(sqlite3_column_text(statement, 4))
                     let hubble = stringFrom(sqlite3_column_text(statement, 5))
                     let majAx =  Double(sqlite3_column_double(statement, 6))
-                    ret.append(NGCObject(name:name,x:x,y:y,z:z,type:type,hubble:hubble,majAx:majAx))
+                    let m =      stringFrom(sqlite3_column_text(statement, 7))
+                    ret.append(NGCObject(name:name,x:x,y:y,z:z,type:type,hubble:hubble,majAx:majAx,m:m))
                 }
                 else {
                     more = false

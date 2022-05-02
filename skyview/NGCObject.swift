@@ -17,8 +17,9 @@ class NGCObject: Identifiable, Codable  {
     var hubble:String
     var type:String
     var majAx:Double
+    var messier:String
     
-    init(name:String, x:Double, y:Double,z:Double,type:String, hubble:String,majAx:Double) {
+    init(name:String, x:Double, y:Double,z:Double,type:String, hubble:String,majAx:Double,m:String) {
         self.id = UUID()
         self.name = name
         self.x = x
@@ -27,6 +28,7 @@ class NGCObject: Identifiable, Codable  {
         self.type = type
         self.hubble = hubble
         self.majAx = majAx
+        self.messier = m
     }
     
 }

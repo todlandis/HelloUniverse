@@ -190,10 +190,10 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1229"
-            endingLineNumber = "1229"
-            landmarkName = "pan(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1231"
+            endingLineNumber = "1231"
+            landmarkName = "SkyView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -254,10 +254,10 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1221"
-            endingLineNumber = "1221"
-            landmarkName = "SkyView"
-            landmarkType = "3">
+            startingLineNumber = "1223"
+            endingLineNumber = "1223"
+            landmarkName = "unMap(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -270,8 +270,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1216"
-            endingLineNumber = "1216"
+            startingLineNumber = "1218"
+            endingLineNumber = "1218"
             landmarkName = "unMap(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -350,8 +350,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
+            startingLineNumber = "573"
+            endingLineNumber = "573"
             landmarkName = "SkyView"
             landmarkType = "3">
          </BreakpointContent>
@@ -606,9 +606,9 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "776"
-            endingLineNumber = "776"
-            landmarkName = "labelStars(_:)"
+            startingLineNumber = "778"
+            endingLineNumber = "778"
+            landmarkName = "plotLine(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -622,8 +622,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1050"
-            endingLineNumber = "1050"
+            startingLineNumber = "1052"
+            endingLineNumber = "1052"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -638,8 +638,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "948"
-            endingLineNumber = "948"
+            startingLineNumber = "950"
+            endingLineNumber = "950"
             landmarkName = "boxStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1160,8 +1160,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1021"
-            endingLineNumber = "1021"
+            startingLineNumber = "1023"
+            endingLineNumber = "1023"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1893,9 +1893,9 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "474"
-            endingLineNumber = "474"
-            landmarkName = "drawDarkNebulas()"
+            startingLineNumber = "476"
+            endingLineNumber = "476"
+            landmarkName = "drawSNRs()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

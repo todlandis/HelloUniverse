@@ -458,7 +458,9 @@ class SkyView: UIView {
     func drawGalaxies() {
         let list = OpenNGCCatalog.shared.getGalaxies()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            if !settings!.drawMessier.isOn || ngc.messier.count == 0 {
+                plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            }
         }
     }
 
