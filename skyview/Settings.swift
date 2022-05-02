@@ -123,7 +123,7 @@ class Settings {
     let surveys = [
 
         (id:"P/DSS2/color",desc:"1:Digitized Sky Survey (Color)",type:"Visual", url:"https://archive.eso.org/dss/dss"),
-        (id:"P/HST/SDSSg",desc:"Hubble",type:"",url:""),
+        (id:"P/HST/WideV",desc:"Hubble",type:"",url:""),
         (id:"P/2MASS/color",desc:"2:Two Micron All Sky Survey", type:"Near Infrared",url:"https://www.sdss.org"),
         //        The Two Micron All Sky Survey - J-H-K bands (2MASS color)
         //        2MASS color J (1.23um), H (1.66um), K (2.16um)
@@ -208,4 +208,21 @@ class Settings {
 
     ]
     
+    func chooseSurvey(survey:String) {
+        var i = 0
+        while i < surveys.count {
+            if surveys[i].id == survey {
+                break
+            }
+            i = i + 1
+        }
+        if i == surveys.count {
+            print("a survey in a URL wasn't found:  \(survey)")
+            currentSurvey = 0
+            self.survey = surveys[0].desc
+            return
+        }
+        currentSurvey = i
+        self.survey = survey
+    }
 }
