@@ -37,17 +37,25 @@ class Constellations {
             return (X,Y,Z)
         }
         
+        // hack
+        // this is how to generate new rows for the Endpoint table,run this, then
+        // execute sql commands on bsc5.db:
+        //    delete from Endpoints where name = (name)
+        // .separator ","
+        // .import (file with these lines) Endpoints
         if let pairs = getConstellationPoints(name) {  // pairs in ra,dec
             for val in pairs {
                 let first = raDecToXYZ(ra:val.0, dec:val.1)
                 let second = raDecToXYZ(ra:val.2, dec:val.3)
+                print("'",name,"',",first.x,",",first.y,",",first.z,",",second.x,",",second.y,",",second.z)
                 points.append((name,first,second))
             }
         }
         return points
     }
     
-    // used for making the database table EndPoints
+    // called by getConstellationPointsXYZ0()
+    //    used for making the database table EndPoints
     func getConstellationPoints(_ name:String) -> [(Double,Double,Double,Double)]? {
           var pairs:[(String,String)]? = nil
         let namel = name.lowercased()
@@ -519,25 +527,42 @@ class Constellations {
             pairs =  [
                 ("Pi","Gam"),
                 ("Bet","Gam"),
-                ("Bet","Zet"),
+                ("Bet","Xi"),
+                // Xi to beta,crater
+                // alpha crater to nu
                 
                 ("Nu","Mu"),
                 ("Mu","Lam"),
-                ("Nu1","Lam"),
-                
-                ("Nu1","Alp"),
+                ("Lam","Alp"),
                 ("Alp","Iot"),
                 ("Iot","The"),
                 ("The","Eta"),
                 
-                ("The","Eta"),
                 ("Eps","Eta"),
                 ("Eps","Del"),
                 ("Del","Sig"),
                 ("Eta","Sig"),
                 ("Eta","Rho"),
             ]
-            return pairsToPoints(pairs:pairs!,name:namel)
+            var list = pairsToPoints(pairs:pairs!,name:namel)
+
+            let catalog = BrightStarCatalog.shared
+            _ = catalog.open()
+            if let betaCrater = catalog.lookupBayerName(greek:"Bet", constellation:"Crt") {
+                if let xiHya = catalog.lookupBayerName(greek:"Xi", constellation:"Hya") {
+                    list.append ((xiHya.ra,xiHya.dec,betaCrater.ra,betaCrater.dec))
+                }
+            }
+            if let alphaCrater = catalog.lookupBayerName(greek:"Alp", constellation:"Crt") {
+                if let nuHya = catalog.lookupBayerName(greek:"Nu", constellation:"Hya") {
+                    list.append ((nuHya.ra,nuHya.dec,alphaCrater.ra,alphaCrater.dec))
+                }
+            }
+            catalog.close()
+            print("------")
+            print(list)
+            print("------")
+            return list
 
         case "hyi": // hydrus
             pairs =  [

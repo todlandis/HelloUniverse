@@ -458,65 +458,63 @@ class SkyView: UIView {
     func drawGalaxies() {
         let list = OpenNGCCatalog.shared.getGalaxies()
         for ngc in list {
-            if !settings!.drawMessier.isOn || ngc.messier.count == 0 {
-                plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
-            }
+            plotNGC(ngc)
         }
     }
 
     func drawSNRs() {
         let list = OpenNGCCatalog.shared.getSuperNovaRemnants()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
     
     func drawDarkNebulas() {
         let list = OpenNGCCatalog.shared.getDarkNebulas()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
     
     func drawGlobulars() {
         let list = OpenNGCCatalog.shared.getGlobularClusters()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
 
     func drawOpenClusters() {
         let list = OpenNGCCatalog.shared.getOpenClusters()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
 
     func drawNebulas() {
         let list = OpenNGCCatalog.shared.getNebulas()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
     
     func drawHIIRegions() {
         let list = OpenNGCCatalog.shared.getHIIRegions()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
 
     func drawNovas() {
         let list = OpenNGCCatalog.shared.getNovas()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
 
     func drawBinaries() {
         let list = OpenNGCCatalog.shared.getBinaries()
         for ngc in list {
-            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+            plotNGC(ngc)
         }
     }
 
@@ -681,9 +679,15 @@ class SkyView: UIView {
 
         let catalog = BrightStarCatalog.shared
         _ = catalog.open()
-        // FASTER drop name from query, just draw the line
+        // it would be faster to drop names from this query,
+        //   but having them makes it possible to debug constellation
+        //   lines one constellation at a time
+        //
+        // this is where to substitute getConstellationLines0 to
+        //   test  changes
         if let lines = catalog.getConstellationLines() {
             for line in lines {
+//                print("line.name",line.name)
                 drawLine(line.first, line.second)
             }
         }
@@ -903,7 +907,13 @@ class SkyView: UIView {
         context.addRect(r)
         context.strokePath()
     }
-
+    
+    func plotNGC(_ ngc:NGCObject) {
+        if !settings!.drawMessier.isOn || ngc.messier.count == 0 {
+            plotObject(label:ngc.name, x:ngc.x,y:ngc.y,z:ngc.z)
+        }
+    }
+    
     func plotObject(label:String,x:Double,y:Double,z:Double) {
         // user can zoom in to see the labels
         if skyViewTransform.scale > 750.0 {

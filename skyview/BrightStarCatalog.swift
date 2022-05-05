@@ -175,6 +175,11 @@ class BrightStarCatalog : SqliteDatabase {
         return names;
     }
 
+    // use this to build names and 6-tuples for debugging
+    func getConstellationLines0() -> [(name:String, first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]? {
+        let con = Constellations()
+        return con.getConstellationPointsXYZ0("Hya")
+    }
     
     // read names and 6-tuples from table EndPoints
     func getConstellationLines() -> [(name:String, first:(x:Double,y:Double,z:Double),second:(x:Double,y:Double,z:Double))]? {
