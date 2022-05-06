@@ -684,10 +684,11 @@ class SkyView: UIView {
         //   lines one constellation at a time
         //
         // this is where to substitute getConstellationLines0 to
-        //   test  changes
+        //   generate and test Endpoints of constellation lines
         if let lines = catalog.getConstellationLines() {
             for line in lines {
-//                print("line.name",line.name)
+                print("line.name",line.name)
+                if line.name == "eri" { continue }
                 drawLine(line.first, line.second)
             }
         }

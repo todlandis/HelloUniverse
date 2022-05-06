@@ -37,12 +37,14 @@ class Constellations {
             return (X,Y,Z)
         }
         
-        // hack
-        // this is how to generate new rows for the Endpoint table,run this, then
-        // execute sql commands on bsc5.db:
-        //    delete from Endpoints where name = (name)
-        // .separator ","
-        // .import (file with these lines) Endpoints
+        // this is how to generate new rows for the Endpoint table...
+        // Switch to getConstellationPoints() then
+        // copy output from the console to a csv file.
+        // Then update Endpoints with the new stuff:
+        //      sqlite3 bsc5.db
+        //      delete from Endpoints where name = (const name)
+        //      .separator ","
+        //      .import (new CSV file) Endpoints
         if let pairs = getConstellationPoints(name) {  // pairs in ra,dec
             for val in pairs {
                 let first = raDecToXYZ(ra:val.0, dec:val.1)
@@ -559,9 +561,6 @@ class Constellations {
                 }
             }
             catalog.close()
-            print("------")
-            print(list)
-            print("------")
             return list
 
         case "hyi": // hydrus
@@ -804,7 +803,32 @@ class Constellations {
 //            "phe",
 //            "pic",
 //            "psa",
-//            "psc",
+        case "psc":              // pisces
+            pairs = [
+                ("Tau","Phi"),
+                ("Phi","Ups"),
+                ("Ups","Tau"),
+                
+                ("Phi","Rho"),
+                ("Eta","Rho"),
+                ("Eta","Omi"),
+                ("Alp","Omi"),
+
+                ("Alp","Nu"),
+                ("Nu","Mu"),
+                ("Mu","Eps"),
+                ("Eps","Del"),
+                ("Del","Ome"),
+                ("Ome","Iot"),
+                
+                ("Iot","The"),
+                ("The","Gam"),
+                ("Gam","Kap"),
+                ("Kap","Lam"),
+                ("Lam","Iot"),
+            ]
+//            print("------")
+            return  pairsToPoints(pairs:pairs!,name:namel)
 //            "pup",
 //            "pyx",
 //            "ret",

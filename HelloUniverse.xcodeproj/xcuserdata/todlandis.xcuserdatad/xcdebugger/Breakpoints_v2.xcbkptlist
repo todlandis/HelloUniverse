@@ -190,10 +190,10 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1241"
-            endingLineNumber = "1241"
-            landmarkName = "lastTranslation"
-            landmarkType = "24">
+            startingLineNumber = "1242"
+            endingLineNumber = "1242"
+            landmarkName = "pan(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -254,8 +254,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1233"
-            endingLineNumber = "1233"
+            startingLineNumber = "1234"
+            endingLineNumber = "1234"
             landmarkName = "SkyView"
             landmarkType = "3">
          </BreakpointContent>
@@ -270,8 +270,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1228"
-            endingLineNumber = "1228"
+            startingLineNumber = "1229"
+            endingLineNumber = "1229"
             landmarkName = "unMap(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -606,8 +606,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "782"
-            endingLineNumber = "782"
+            startingLineNumber = "783"
+            endingLineNumber = "783"
             landmarkName = "labelStars(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -622,8 +622,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1062"
-            endingLineNumber = "1062"
+            startingLineNumber = "1063"
+            endingLineNumber = "1063"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -638,8 +638,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "960"
-            endingLineNumber = "960"
+            startingLineNumber = "961"
+            endingLineNumber = "961"
             landmarkName = "boxStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1160,8 +1160,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1033"
-            endingLineNumber = "1033"
+            startingLineNumber = "1034"
+            endingLineNumber = "1034"
             landmarkName = "plotStar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1909,8 +1909,8 @@
             filePath = "skyview/Constellations.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "527"
-            endingLineNumber = "527"
+            startingLineNumber = "529"
+            endingLineNumber = "529"
             landmarkName = "getConstellationPoints(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1925,8 +1925,8 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "691"
-            endingLineNumber = "691"
+            startingLineNumber = "692"
+            endingLineNumber = "692"
             landmarkName = "drawConstellationLinesF()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1957,9 +1957,41 @@
             filePath = "skyview/SkyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "694"
-            endingLineNumber = "694"
+            startingLineNumber = "695"
+            endingLineNumber = "695"
             landmarkName = "drawConstellationLinesF()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D671563C-CF41-448E-ACBB-2CE1E3A7EC4F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "skyview/BrightStarCatalog.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "getConstellationLines0()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FE209E04-9591-4851-88E4-6A62886714C6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "skyview/Constellations.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "807"
+            endingLineNumber = "807"
+            landmarkName = "getConstellationPoints(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
