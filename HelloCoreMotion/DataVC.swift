@@ -31,7 +31,7 @@ class SurveyCell : UITableViewCell {
         surveyLabel.text = settings.surveys[cur].desc
         typeLabel.text = settings.surveys[cur].type
         
-        settings.survey = settings.surveys[cur].id
+//        settings.survey = settings.surveys[cur].id
         controller?.appDelegate?.initialSurvey = settings.surveys[cur].id
     }
     
@@ -48,7 +48,7 @@ class SurveyCell : UITableViewCell {
         surveyLabel.text = settings.surveys[cur].desc
         typeLabel.text = settings.surveys[cur].type
         
-        settings.survey = settings.surveys[cur].id
+//        settings.survey = settings.surveys[cur].id
         controller?.appDelegate?.initialSurvey = settings.surveys[cur].id
     }
 }

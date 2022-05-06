@@ -109,14 +109,19 @@ class Settings {
 
     var messierColor = TangoColors.TANGOORANGE
     
-    var currentSurvey:Int = 0
-    
-    var previousSurvey:String = "P/DSS2/color"
-    var survey:String = "P/DSS2/color" {
+    var previousSurvey:Int = 0
+    var currentSurvey:Int = 0 {
         willSet {
-            previousSurvey = survey
+            previousSurvey = currentSurvey
         }
     }
+    
+//    var previousSurvey:String = "P/DSS2/color"
+//    var survey:String = "P/DSS2/color" {
+//        willSet {
+////            previousSurvey = survey
+//        }
+//    }
     
     // Surveys that are marked "lite" in this list:
     // http://aladin.unistra.fr/hips/list
@@ -219,10 +224,10 @@ class Settings {
         if i == surveys.count {
             print("a survey in a URL wasn't found:  \(survey)")
             currentSurvey = 0
-            self.survey = surveys[0].desc
+//            self.survey = surveys[0].desc
             return
         }
         currentSurvey = i
-        self.survey = survey
+//        self.survey = survey
     }
 }

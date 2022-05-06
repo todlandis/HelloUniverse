@@ -110,8 +110,8 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
 
         if let settings =  self.appDelegate?.settings {
             self.plusView.alpha = settings.drawCenterPlus.isOn ? 1.0 : 0.0
-            if !(self.aladin?.getImageSurvey() == settings.survey) {
-                self.aladin?.setImageSurvey(survey: settings.survey)
+            if !(self.aladin?.getImageSurvey() == settings.surveys[settings.currentSurvey].id) {
+                self.aladin?.setImageSurvey(survey: settings.surveys[settings.currentSurvey].id)
             }
         }
 
@@ -308,10 +308,10 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
                 gotoTheZenith()
                 break
             case ".":
-                self.aladin?.setImageSurvey(survey: appDelegate.settings.previousSurvey)
-                let swap = appDelegate.settings.survey
-                appDelegate.settings.survey = appDelegate.settings.previousSurvey
+                let swap = appDelegate.settings.currentSurvey
+                appDelegate.settings.currentSurvey = appDelegate.settings.previousSurvey
                 appDelegate.settings.previousSurvey = swap
+                switchAladinToSurvey(appDelegate.settings.currentSurvey)
                 break
             case "1","2","3","4","5","6","7","8","9",
                  "10","11","12","13","14","15","16","17","18","19",
@@ -320,6 +320,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
                     doSearch(text)
                 }
                 else if let k = Int(cmd) {
+                    appDelegate.settings.currentSurvey = k-1
                     switchAladinToSurvey(k-1)
                 }
                 break
@@ -413,7 +414,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
         
         let surveys = appDelegate.settings.surveys
         if k >= 0 && k < surveys.count {
-            appDelegate.settings.survey = surveys[k].id
+//            appDelegate.settings.survey = surveys[k].id
             self.aladin?.setImageSurvey(survey: surveys[k].id)
         }
     }
