@@ -68,7 +68,19 @@ class Aladin {
 
             var markerLayer = A.catalog();
             aladin.addCatalog(markerLayer);
-      
+    
+                  function gotoObjectWithPromise(val) {
+                      return new Promise(function(resolve, reject) {
+                          aladin.gotoObject(val, {success: function(raDec) {resolve(raDec);}, error: function(error) {reject(error);} });
+                      });
+                      }
+
+                  function gotoRaDecWithPromise(ra,dec) {
+                      return new Promise(function(resolve, reject) {
+            +              aladin.gotoRaDec(ra,dec, {success: function(raDec) {resolve(raDec);}, error: function(error) {reject(error);} });
+                      });
+                      }
+
             </script>
         </body>
     </html>
@@ -294,7 +306,7 @@ class Aladin {
     }
     
     func getImageSurvey() -> String {
-        return currentSurvey  // LATER aladin s/b the source of truth
+        return currentSurvey  // LATER make aladin the source of truth
     }
     
     func setImageSurvey(survey:String) {
@@ -302,8 +314,39 @@ class Aladin {
         execute(cmd:"aladin.setImageSurvey(\'\(survey)\')")
     }
 
-    func gotoRaDec(ra:Double, dec:Double) {
-        execute(cmd:"aladin.gotoRaDec(\(ra), \(dec))")
+    func gotoRaDec(ra:Double, dec:Double, completionHandler:  @escaping (Error?) -> Void)  {
+        if #available(iOS 14.0, *) {
+            gotoRaDecWithPromise(ra:ra, dec:dec, completionHandler:   completionHandler)
+        }
+        else {
+            execute(cmd:"aladin.gotoRaDec(\(ra), \(dec))")
+            completionHandler(nil) // never returns an error
+        }
+    }
+
+    @available(iOS 14.0, *)
+    func gotoRaDecWithPromise(ra:Double, dec:Double, completionHandler:  @escaping (Error?) -> Void)  {
+        
+        webView.callAsyncJavaScript("""
+                return gotoRaDecWithPromise(ra,dec);
+              """,
+            arguments: [
+                "ra":ra,
+                "dec":dec
+            ],
+            in:.none,
+            in: .page,
+            completionHandler: {
+                result in
+                switch(result) {
+                case .success:
+                    completionHandler(nil)
+                    break
+                case .failure(let error):
+                    completionHandler(error)
+                    break
+                }
+            })
     }
 
     // showing a bug, see "uncomment this line" below
@@ -340,18 +383,48 @@ class Aladin {
     // calls the completionHandler with ra,dec of the new position or
     // error
     func gotoObject(name:String, completionHandler: @escaping (Double,Double, Error?) -> Void) {
-        webView.evaluateJavaScript("aladin.gotoObject('\(name)')") {
+        if #available(iOS 14.0, *) {
+            gotoObjectWithPromise(name:name, completionHandler:   completionHandler)
+        }
+        else {
+            webView.evaluateJavaScript("aladin.gotoObject('\(name)')") {
                 (any,error) in
-// uncomment this line to see the bug, this is always nil,nil, e.g. when searching for "verybad 1"
-// print("got values \(any) \(error)")
                 if let error = error {
                     print("ERROR received error:  \(error.localizedDescription))")
                     return
                 }
                 self.getRaDec(completionHandler:completionHandler)
             }
+        }
     }
-    
+
+    @available(iOS 14.0, *)
+    func gotoObjectWithPromise(name:String, completionHandler:  @escaping (Double,Double, Error?) -> Void) {
+        webView.callAsyncJavaScript("""
+                return gotoObjectWithPromise(name);
+              """,
+            arguments: [
+                "name":name,
+            ],
+            in:.none,
+            in: .page,
+            completionHandler: {
+                result in
+                switch(result) {
+                case .success(let results):
+                    print("gotoObjectWithPromise reports success")
+                    if let vals = results as? [Double] {
+                        completionHandler( vals[0],vals[1],nil)
+                    }
+                    break
+                case .failure(let error):
+                    print("gotoObjectWithPromise reports failure")
+                    completionHandler(0,0,error)
+                    break
+                }
+            })
+    }
+
     // this shows a problem with iOS 14.0
     //   rename this to gotoObject() and rename gotoObject() to something else
     //   you will see a message on the console complaining about  a system bug

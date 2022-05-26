@@ -46,20 +46,21 @@ class Settings {
     var drawMagnitude =    Setting("Star Magnitudes", false)
     var drawBayer =        Setting("Star Greek Letters", false)
  
-    var drawMessier =      Setting("Messier Objects", false)
-    var drawSharpless =    Setting("Sharpless Objects", false) // not in UI
+    var drawMessier =      Setting("Messier Objects", true)
+    var drawSharpless =    Setting("Sharpless Objects", false) // not in UI, not tested
     
-    var drawGalaxies =     Setting("NGC Galaxies",true)
+    var drawGalaxies =     Setting("NGC Galaxies",false)
     var drawSNR =          Setting("NGC Super Nova Remnants",false)
     var drawGlobular =     Setting("NGC Globular Clusters",false)
     var drawOpenClusters = Setting("NGC Open Clusters",false)
     var drawNebulas =      Setting("NGC Nebulas",false)
     var drawHIIRegions =   Setting("NGC HII Regions",false)
     var drawDarkNebulas =  Setting("NGC Dark Nebulas",false)
-    var drawNovas =        Setting("NGC Novas",false)
-    var drawBinaries =     Setting("NGC Binaries",false)
-
+    
+    var drawNovas =        Setting("NGC Novas",false)      // not in UI
+    var drawBinaries =     Setting("NGC Binaries",false)   // not in UI
     var drawFOV =          Setting("Telescope FOV",false)  // not in UI
+    
     var drawAladin =       Setting("Aladin Frame", true)
     var drawCenterPlus =   Setting("CenterPlus Sign", false)
 
@@ -81,24 +82,18 @@ class Settings {
         list.append(drawNebulas)
         list.append(drawHIIRegions)
         list.append(drawDarkNebulas)
-        list.append(drawNovas)
-        list.append(drawBinaries)
-
-       //  list.append(drawFOV)
+//        list.append(drawNovas)
+//        list.append(drawBinaries)
+//        list.append(drawFOV)
         list.append(drawAladin)
         list.append(drawCenterPlus)
     }
 
-   // var drawGrid =     false
-
     var decimalFormat = false
-    
-    
     
     var drawSpectralType =    false    // ui does not surface this yet
     var drawParsecs =         false    // ui does not surface this yet
-
-
+ 
     var drawBullsEye =     false       // ui does not surface this yet
     
     var messierLabelSize =       CGFloat(18.0)

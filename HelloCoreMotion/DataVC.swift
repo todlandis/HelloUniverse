@@ -59,7 +59,7 @@ class SettingCell : UITableViewCell {
     @IBOutlet weak var `switch`: UISwitch!
     
     @IBAction func click(_ sender: Any) {
-        print("click \(self.tag)")
+//        print("click \(self.tag)")
         
         guard let settings = controller?.appDelegate?.settings else {
             print("can't happen")
@@ -73,7 +73,7 @@ class SettingCell : UITableViewCell {
                 setting.isOn = !setting.isOn
                 break
             }
-            print("toggled \(setting.name) to \(setting.isOn)")
+//            print("toggled \(setting.name) to \(setting.isOn)")
         }
     }
 }

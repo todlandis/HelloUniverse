@@ -123,7 +123,9 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
                                 ra,dec,err in
                 // don't set the position unless needed, it triggers redraw
                 if abs(ra - raMap) > 0.0001 || abs(dec - decMap) > 0.0001 {
-                    self.aladin?.gotoRaDec(ra: raMap, dec: decMap)
+                    self.aladin?.gotoRaDec(ra: raMap, dec: decMap) {
+                        error in
+                    }
                 }
             })
             updateLabels()
@@ -182,7 +184,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
 //    }
 
     func updateLabels() {
-        func decimalDegreesToLabel(_ d:Double) -> String {
+        func decimalDegreesForFOVLabel(_ d:Double) -> String {
             let (dd,mm,ss) = Convert.decimalDegreesToDMS(d)
             if(dd != 0) {
                 return String(format:"%2.0f°",dd)  // rounds off
@@ -203,7 +205,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
                 self.whoIsThatBehindTheScreen.gotoRaDec(ra:ra,dec:dec)
                 let (h,m,s) = Convert.decimalDegreesToHMS(ra)
                 let (dd,mm,ss) = Convert.decimalDegreesToDMS(dec)
-                self.raDecLabel.text = String(format:"%2.0fh%2.0fm%2.0f %2.0f°%2.0f'%2.0f\"",h,m,s,dd,mm,ss)
+                self.raDecLabel.text = String(format:"%2.0fh %2.0fm %2.0fs    %2.0f° %2.0f' %2.0f\"",h,m,s,dd,mm,ss)
                 
                 self.whoIsThatBehindTheScreen.matchAladin(ra:ra,dec:dec, aladin:self.aladin!)
                 self.whoIsThatBehindTheScreen.setNeedsDisplay()
@@ -211,7 +213,7 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
             self.aladin?.getFov(completionHandler: {
                 (w, h, error) in
                 if error == nil {
-                    let ws = decimalDegreesToLabel(w)
+                    let ws = decimalDegreesForFOVLabel(w)
                 //    let hs = decimalDegreesToLabel(h)
                     self.fovLabel.text = "\(ws)"
                     
@@ -270,15 +272,16 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
     
     func searchBarSearchButtonClicked(_ sb:UISearchBar) {
         func doSearch(_ text:String) {
+            self.searchCompleteLabel.text = "Searching ..."
             aladin?.gotoObject(name: text, completionHandler: {
                 (ra,dec,error) in
                 self.searchCompleteLabel.alpha = 1.0
-                if let error = error {
-                    // dialog here
-                    // needs thought
-                    print(error.localizedDescription)
+                if error != nil {
+                    self.searchCompleteLabel.text = "NOT FOUND'"
                 }
-                // there is a bug causing error to be nil all the time
+                else {
+                    self.searchCompleteLabel.text = "FOUND"
+                }
                 self.updateLabels()
             })
         }
@@ -403,7 +406,9 @@ class AladinVC: UIViewController, LatLonFinderDelegate, UISearchBarDelegate, UIG
             aladin = Aladin(webView, target: appDelegate.initialTarget, survey: appDelegate.initialSurvey, fov:appDelegate.initialFOV)
         }
         else {
-            aladin?.gotoRaDec(ra: z.ra, dec: z.dec)
+            aladin?.gotoRaDec(ra: z.ra, dec: z.dec) {
+                error in
+            }
         }
     }
     
