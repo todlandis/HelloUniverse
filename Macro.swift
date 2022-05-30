@@ -28,14 +28,6 @@ class Macro {
         let tail = String(text[rangeTail]).trimmingCharacters(in: .whitespaces)
         
         switch(cmd) {
-        case ":s",":S",":show":
-            // s (object name) - go to object, and a label for its name there)
-            if #available(iOS 14.0, *) {
-                show(tail)
-            } else {
-                print("SHOW requires iOS 14.0")
-            }
-            break
         case ":l", ":L",":label":
             // add a label at the current center of the view
             labelCenter(tail)
@@ -59,37 +51,8 @@ class Macro {
         aladin.customImageSurvey()
     }
 
-    // center object "text" and label it
-    @available(iOS 14.0, *)
-    func show(_ text:String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
-            return
-        }
-
-        aladin.getRaDec() {
-            ra2,dec2,err in
-            print("before show ra2:\(ra2)  dec2:\(dec2)")
-        }
-        
-        aladin.gotoObjectX(object: text, completionHandler:{
-            error in
-    
-            if error == nil {
-                aladin.getRaDec(completionHandler: {
-                    ra2,dec2,err in
-                    print("show ra2:\(ra2)  dec2:\(dec2)")
-                    appDelegate.annotations.addLabel(text: text, ra: ra2, dec: dec2)
-                    //LATER annotations delegate sends out change notifications
-                    appDelegate.aladinVC?.whoIsThatBehindTheScreen.setNeedsDisplay()
-                    appDelegate.skyViewVC?.skyView.setNeedsDisplay()
-                })
-            }
-            else {
-                print("show NOT FOUND")
-            }
-        })
-    }
-    
+    // show() is no longer supported
+ 
     func labelCenter(_ text:String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let aladin = appDelegate.aladinVC?.aladin else {
             return

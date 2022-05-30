@@ -412,45 +412,45 @@ class Aladin {
                 result in
                 switch(result) {
                 case .success(let results):
-                    print("gotoObjectWithPromise reports success")
+//                    print("gotoObjectWithPromise reports success")
                     if let vals = results as? [Double] {
                         completionHandler( vals[0],vals[1],nil)
                     }
                     break
                 case .failure(let error):
-                    print("gotoObjectWithPromise reports failure")
+//                    print("gotoObjectWithPromise reports failure")
                     completionHandler(0,0,error)
                     break
                 }
             })
     }
 
-    // this shows a problem with iOS 14.0
-    //   rename this to gotoObject() and rename gotoObject() to something else
-    //   you will see a message on the console complaining about  a system bug
-    @available(iOS 14.0, *)
-    func gotoObjectX(object:String, completionHandler: @escaping (Error?) -> Void) {
-        let gotoJavaScript = "aladin.gotoObject(name)"
-        webView.callAsyncJavaScript(gotoJavaScript,
-                                    arguments: [
-                                        "name":object,
-                                    ],
-                                    in:.none,
-                                    in: .page,
-                                    completionHandler: {
-                                        result in
-                                        switch(result) {
-                                        case .success:
-                                            print("SUCCESS!")
-                                            completionHandler(nil)
-                                            break
-                                        case .failure(let error):
-                                            print("ERROR!")
-                                            print(error)
-                                            completionHandler(error)
-                                        }
-                                    })
-    }
+//    // this shows a problem with iOS 14.0
+//    //   rename this to gotoObject() and rename gotoObject() to something else
+//    //   you will see a message on the console complaining about  a system bug
+//    @available(iOS 14.0, *)
+//    func gotoObjectX(object:String, completionHandler: @escaping (Error?) -> Void) {
+//        let gotoJavaScript = "aladin.gotoObject(name)"
+//        webView.callAsyncJavaScript(gotoJavaScript,
+//                                    arguments: [
+//                                        "name":object,
+//                                    ],
+//                                    in:.none,
+//                                    in: .page,
+//                                    completionHandler: {
+//                                        result in
+//                                        switch(result) {
+//                                        case .success:
+//                                            print("SUCCESS!")
+//                                            completionHandler(nil)
+//                                            break
+//                                        case .failure(let error):
+//                                            print("ERROR!")
+//                                            print(error)
+//                                            completionHandler(error)
+//                                        }
+//                                    })
+//    }
     
     //https://aladin.u-strasbg.fr/AladinLite/doc/API/
     //aladin.createImageSurvey(<HiPS-ID>, <HiPS-name>, <HiPS-base-URL>, <HiPS frame ('equatorial' or 'galactic', usually 'equatorial')>, <HiPS max order>, {imgFormat: <tiles format ('jpg' or 'png')>}));

@@ -20,7 +20,7 @@ import UIKit
 import SQLite3
 
 class BrightStarCatalog : SqliteDatabase {
-    var verbose = true
+    var verbose = false
     
     static let shared: BrightStarCatalog = {
         let instance = BrightStarCatalog()
