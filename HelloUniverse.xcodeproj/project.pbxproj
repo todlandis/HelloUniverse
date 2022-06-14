@@ -10,6 +10,7 @@
 		D30744182579A78200E0C5D9 /* SkyViewTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744152579A78200E0C5D9 /* SkyViewTransform.swift */; };
 		D30744192579A78200E0C5D9 /* Annotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744162579A78200E0C5D9 /* Annotations.swift */; };
 		D307441A2579A78200E0C5D9 /* SkyViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */; };
+		D312FA86285825DC00EFEA5E /* CREDITS in Resources */ = {isa = PBXBuildFile; fileRef = D312FA85285825DC00EFEA5E /* CREDITS */; };
 		D31E5D1224D3B87C0013B254 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E5D1124D3B87C0013B254 /* AppDelegate.swift */; };
 		D31E5D1424D3B87C0013B254 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E5D1324D3B87C0013B254 /* SceneDelegate.swift */; };
 		D31E5D1924D3B87C0013B254 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D31E5D1724D3B87C0013B254 /* Main.storyboard */; };
@@ -41,7 +42,6 @@
 		D3E6BFCD281BAA7600AEF0DF /* DataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E6BFCC281BAA7600AEF0DF /* DataVC.swift */; };
 		D3E6BFCF281CCC3600AEF0DF /* CLONE in Resources */ = {isa = PBXBuildFile; fileRef = D3E6BFCE281CCC3600AEF0DF /* CLONE */; };
 		D3E6BFD1281CCC6100AEF0DF /* OpenNGCCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E6BFD0281CCC6100AEF0DF /* OpenNGCCatalog.swift */; };
-		D3E6BFD3281CCCD600AEF0DF /* NGCObjectOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E6BFD2281CCCD600AEF0DF /* NGCObjectOLD.swift */; };
 		D3E6BFD7281D0B4800AEF0DF /* OpenNGC.db in Resources */ = {isa = PBXBuildFile; fileRef = D3E6BFD6281D0B4800AEF0DF /* OpenNGC.db */; };
 		D3E88E8A250080E9009D0EBF /* InfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E88E89250080E9009D0EBF /* InfoVC.swift */; };
 		D3E88E8C2500ABD6009D0EBF /* m45.png in Resources */ = {isa = PBXBuildFile; fileRef = D3E88E8B2500ABD6009D0EBF /* m45.png */; };
@@ -52,6 +52,7 @@
 		D30744152579A78200E0C5D9 /* SkyViewTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SkyViewTransform.swift; path = skyview/SkyViewTransform.swift; sourceTree = SOURCE_ROOT; };
 		D30744162579A78200E0C5D9 /* Annotations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Annotations.swift; path = skyview/Annotations.swift; sourceTree = SOURCE_ROOT; };
 		D30744172579A78200E0C5D9 /* SkyViewOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SkyViewOverlay.swift; path = skyview/SkyViewOverlay.swift; sourceTree = SOURCE_ROOT; };
+		D312FA85285825DC00EFEA5E /* CREDITS */ = {isa = PBXFileReference; lastKnownFileType = text; path = CREDITS; sourceTree = "<group>"; };
 		D31E5D0E24D3B87C0013B254 /* HelloUniverse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloUniverse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D31E5D1124D3B87C0013B254 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D31E5D1324D3B87C0013B254 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,7 +89,6 @@
 		D3E6BFCC281BAA7600AEF0DF /* DataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataVC.swift; sourceTree = "<group>"; };
 		D3E6BFCE281CCC3600AEF0DF /* CLONE */ = {isa = PBXFileReference; lastKnownFileType = text; path = CLONE; sourceTree = SOURCE_ROOT; };
 		D3E6BFD0281CCC6100AEF0DF /* OpenNGCCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNGCCatalog.swift; sourceTree = "<group>"; };
-		D3E6BFD2281CCCD600AEF0DF /* NGCObjectOLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGCObjectOLD.swift; sourceTree = "<group>"; };
 		D3E6BFD6281D0B4800AEF0DF /* OpenNGC.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenNGC.db; sourceTree = "<group>"; };
 		D3E88E89250080E9009D0EBF /* InfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVC.swift; sourceTree = "<group>"; };
 		D3E88E8B2500ABD6009D0EBF /* m45.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = m45.png; sourceTree = "<group>"; };
@@ -112,6 +112,7 @@
 			children = (
 				D3E6BFCE281CCC3600AEF0DF /* CLONE */,
 				D3431EFC25269AAF00E11DDF /* COPYING */,
+				D312FA85285825DC00EFEA5E /* CREDITS */,
 				D3431EFE25269B2800E11DDF /* README.md */,
 				D3E88E8B2500ABD6009D0EBF /* m45.png */,
 				D35D7A5024E3A665001F5E66 /* skyview */,
@@ -184,7 +185,6 @@
 				D35D7A5D24E3B932001F5E66 /* Greek.swift */,
 				D3246533251E773700C4D227 /* Telescope.swift */,
 				D3ACA246281DE8F7008354EF /* NGCObject.swift */,
-				D3E6BFD2281CCCD600AEF0DF /* NGCObjectOLD.swift */,
 			);
 			path = skyview;
 			sourceTree = "<group>";
@@ -249,6 +249,7 @@
 				D3E6BFD7281D0B4800AEF0DF /* OpenNGC.db in Resources */,
 				D3431EFD25269AAF00E11DDF /* COPYING in Resources */,
 				D35D7A5A24E3B5B4001F5E66 /* bsc5.db in Resources */,
+				D312FA86285825DC00EFEA5E /* CREDITS in Resources */,
 				D3E6BFCF281CCC3600AEF0DF /* CLONE in Resources */,
 				D31E5D1E24D3B87D0013B254 /* LaunchScreen.storyboard in Resources */,
 				D31E5D1B24D3B87D0013B254 /* Assets.xcassets in Resources */,
@@ -286,7 +287,6 @@
 				D3207C8325350B6D007396DB /* Macro.swift in Sources */,
 				D3ECC8D3251FDCB6006A80FE /* PlusView.swift in Sources */,
 				D3940EF324EB29BC00A69907 /* Settings.swift in Sources */,
-				D3E6BFD3281CCCD600AEF0DF /* NGCObjectOLD.swift in Sources */,
 				D35D7A4F24E3A220001F5E66 /* SkyView.swift in Sources */,
 				D3246534251E773700C4D227 /* Telescope.swift in Sources */,
 				D35D7A5424E3AD5D001F5E66 /* BrightStarCatalog.swift in Sources */,
