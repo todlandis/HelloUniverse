@@ -37,26 +37,7 @@ class SkyView: UIView {
     let labelColor = TangoColors.BUTTER
 
     
-    // transform start
     let skyViewTransform:SkyViewTransform = SkyViewTransform()
-    
-//    var culling = true                    // see mapXYZ
-//
-//    var translationVector = simd_double3(0,0,0)
-//    var decAngle:Double = 0.0           // degrees
-//    var raAngle:Double = 0.0            // degrees
-//    var latAngle:Double = 0.0
-//    var rotationMatrix = matrix_identity_double3x3
-//    var inverseRotationMatrix = matrix_identity_double3x3
-//
-//    // this makes a 2.5D projection and flips the z axis
-//    // x is 'right', y is 'into the screen', z is 'up',
-//    // y values will be used for culling
-//    var projectionMatrix:simd_double3x2 = simd_double3x2(simd_double2(1.0,0.0),simd_double2(0.0,0.0),simd_double2(0.0,-1.0))
-//
-//    var scaleForStarView = 400.0
-//    var scale:Double = 400.0     // set for each draw
-    // transform end
 
     var settings:Settings? = nil
     var annotations:Annotations? = nil
@@ -74,9 +55,6 @@ class SkyView: UIView {
     // see drawCrossHairs() below
     var crossHairs:(ra:Double,dec:Double)? = nil
     
-//    var starLabels = [String]()  // deprecated
-//    var labels = [(s:String,(x:Double,y:Double,z:Double))]()
-    
     var messierFont:UIFont? = nil
     var appDelegate:AppDelegate? = nil
     
@@ -90,8 +68,6 @@ class SkyView: UIView {
         addGestureRecognizer(pinch)
         
         //https://developer.apple.com/documentation/uikit/uihovergesturerecognizer
-//        let hover = UIHoverGestureRecognizer(target: self, action: #selector(hovering(_:)))
-//        addGestureRecognizer(hover)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
         addGestureRecognizer(tap)
@@ -180,32 +156,6 @@ class SkyView: UIView {
     
     let catalog = BrightStarCatalog.shared
     
-//    // map a point from space x,y,z to screen x,y
-//    //
-//    // the mapping consists of
-//    //           a translation in xyz
-//    //           a rotation in xyz
-//    //           projection to 2D
-//    //           a scaling
-//    func mapXYZ(_ pIn:simd_double3) -> CGPoint? {
-//        let pRotated = rotationMatrix * (pIn + translationVector)
-//        
-//        if(culling && pRotated.y < 0) {
-//            return nil          // culled
-//        }
-//        
-//        let pIn = scale * projectionMatrix * pRotated
-//        return CGPoint(x:pIn.x,y:pIn.y)
-//    }
-//    
-//    
-//    // set rotationMatrix so that latAngle,decAngle is centered, pointing
-//    //    into the screen & calculate its inverse for unMap()
-//    func updateMatrices() {
-//        rotationMatrix = Matrix.rotationAroundY(degrees:latAngle) * Matrix.rotationAroundX(degrees:decAngle) * Matrix.rotationAroundZ(degrees:  raAngle-90.0)
-//        inverseRotationMatrix =
-//            Matrix.rotationAroundZ(degrees:  90.0 - raAngle) * Matrix.rotationAroundX(degrees:-decAngle) * Matrix.rotationAroundY(degrees:-latAngle)
-//    }
     
 
     // set content mode to "Redraw" so resizes trigger a redraw
@@ -1121,79 +1071,6 @@ class SkyView: UIView {
         context.fillPath()
     }
     
-    // there are limitations, this reverse mappinggives funny results within
-    // about 3 degrees of the north or south pole (dec = +/- 90)
-    //            e.g. 180,-89   ->   nan,nan
-//    func testOLD () {
-//        print()
-//        print()
-////        print(atan2(sin(0.0),cos(0.0)))
-////        print(atan2(0.0,1.0))
-//
-//        let raIn:Double =   180.0          // 0 to 360 allowed
-//        let decIn:Double = -87.0       // -90 to 90 allowed
-//        print("test put in \(raIn) \(decIn)")
-//
-//        let raRadians:Double = raIn * Double.pi/180.0
-//        let decRadians:Double = decIn * Double.pi/180.0
-//        print("raRadians \(raRadians)   decRadians \(decRadians)")
-//
-//        let X = cos(raRadians) * cos(decRadians)
-//        let Y = sin(raRadians) * cos(decRadians)
-//        let Z = sin(decRadians)                  // easy to recover decRadians!
-//                                                 // decRadians= asin(z)  asin returns a value in - pi/2 to pi/2
-//                                                 //    which matches the range of possible decRadians
-//
-//        let q =   simd_double3(X,Y,Z)
-//
-//        let qRotated =   rotationMatrix * q
-////print("after rotating q \(qRotated)")
-//
-//        let qProjected = projectionMatrix * qRotated
-////        print("q2 after projecting \(qProjected)")
-//
-//        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
-// //       print("after unprojecting\(qUnprojected)")
-// //       print("difference after unprojecting \(qUnprojected-qRotated)")
-//
-//        let qUnrotated = inverseRotationMatrix * qUnprojected
-// //       print("after unrotating XYZ = \(qUnrotated.x) \(qUnrotated.y) \(qUnrotated.z)")
-//
-//        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
-//        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
-//        let  decRadiansBack = asin(qUnrotated.z)
-//        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
-//
-//        let raBack = raRadiansBack * 180.0/Double.pi
-//        let decBack = decRadiansBack * 180.0/Double.pi
-//
-//        print("test get back ra = \(raBack)  dec = \(decBack)")
-//    }
-//
-//    func test2() {
-//        let qProjected = simd_double2(x:0.0,y:0.0)
-//        let qUnprojected = simd_double3(qProjected.x, sqrt(1.0 - qProjected.x*qProjected.x - qProjected.y*qProjected.y),-qProjected.y)
-//
-//        let qUnrotated = inverseRotationMatrix * qUnprojected
-//
-//        // https://en.wikipedia.org/wiki/Spherical_coordinate_system
-//        let raRadiansBack =  atan2(qUnrotated.y,qUnrotated.x)
-//        let  decRadiansBack = asin(qUnrotated.z)
-//        print("raRadiansBack \(raRadiansBack)  decRadiansBack \(decRadiansBack)")
-//
-//        let raBack = raRadiansBack * 180.0/Double.pi
-//        let decBack = decRadiansBack * 180.0/Double.pi
-//
-//        print("test2  ra = \(raBack)  dec = \(decBack)")
-//    }
-    
-//    func raDecToXYZ(ra:Double,dec:Double) -> simd_double3? {
-//        let raRadians = ra * Double.pi/180.0
-//        let decRadians = dec * Double.pi/180.0
-//        return simd_double3(cos(raRadians) * cos(decRadians),
-//        sin(raRadians) * cos(decRadians),
-//        sin(decRadians))
-//    }
 
     // map (ra,dec) in degrees on the unit sphere to screen (x,y)
     func mapRAandDEC(ra:Double,dec:Double) -> CGPoint? {
